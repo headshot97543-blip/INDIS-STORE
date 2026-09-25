@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>InstaBook — Store 🛍️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a; --card:#161616; --card2:#1e1e1e; --elevated:#262626;
+  --text:#f1f1f1; --text2:#a0a0a0; --text3:#6b6b6b;
+  --border:#282828; --hover:#202020; --hover2:#333;
+  --ig:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --ig2:linear-gradient(45deg,#405de6,#833ab4,#e1306c,#fd1d1d,#fcb045);
+  --blue:#3ea6ff; --green:#22c55e; --red:#ff3355;
+  --gold:linear-gradient(135deg,#f7971e,#ffd200);
+  --shadow:0 8px 30px rgba(0,0,0,.55);
+  --radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{background:none;border:none;cursor:pointer;color:inherit;font-family:inherit;transition:all .18s cubic-bezier(.2,.8,.2,1)}
+button:active{transform:scale(.96)}
+input,textarea,select{font-family:inherit;color:inherit;outline:none}
+img{max-width:100%;display:block}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#555}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes moneyPop{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,51,85,.75)}70%{box-shadow:0 0 0 14px rgba(255,51,85,0)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(247,151,30,.5)}50%{box-shadow:0 0 40px rgba(247,151,30,.85)}}
+@keyframes giftFall{0%{transform:translateY(-60px) rotate(0) scale(.6);opacity:0}15%{opacity:1;transform:translateY(0) rotate(0) scale(1)}100%{transform:translateY(220px) rotate(45deg) scale(.9);opacity:0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes newBadge{0%{transform:scale(0) rotate(-180deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes cardPop{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes countBump{0%{transform:scale(1)}50%{transform:scale(1.12);color:#ffd200}100%{transform:scale(1)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes saleFlash{0%{box-shadow:0 0 0 0 rgba(34,197,94,.8)}50%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes bounceIcon{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.15)}}
+@keyframes soldPop{0%{transform:scale(0) rotate(-180deg);opacity:0}60%{transform:scale(1.3) rotate(10deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes liveBannerPulse{0%,100%{background:linear-gradient(135deg,rgba(255,51,85,.15),rgba(255,51,85,.08));border-color:rgba(255,51,85,.4)}50%{background:linear-gradient(135deg,rgba(255,51,85,.25),rgba(255,51,85,.12));border-color:rgba(255,51,85,.75)}}
+@keyframes dotBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:14px;z-index:900;backdrop-filter:blur(20px)}
+.logo{font-size:24px;font-weight:900;background:var(--ig2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;letter-spacing:-.8px}
+.logo::after{content:"🛍️";font-size:14px;-webkit-text-fill-color:initial;margin-left:6px}
+.top-spacer{flex:1}
+.top-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--text);position:relative}
+.top-btn:hover{background:var(--hover2)}
+.top-badge{position:absolute;top:4px;right:4px;background:var(--red);color:#fff;font-size:9px;font-weight:800;min-width:17px;height:17px;border-radius:9px;display:grid;place-items:center;padding:0 4px;border:2px solid var(--bg)}
+.top-badge[data-empty="true"]{display:none}
+.top-live-dot{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:var(--green);border:2px solid var(--bg);animation:pulse 1.5s infinite}
+.top-avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;cursor:pointer;background:var(--ig);padding:2px;flex-shrink:0;transition:transform .2s}
+.top-avatar:hover{transform:scale(1.08)}
+.top-avatar > div{width:100%;height:100%;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:13px;font-weight:800;overflow:hidden;color:var(--text)}
+.top-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh;padding-top:64px;max-width:1500px;margin:0 auto}
+.sidebar{border-right:1px solid var(--border);padding:14px 10px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
+.side-item{display:flex;align-items:center;gap:20px;padding:11px 14px;border-radius:10px;font-size:14.5px;font-weight:500;cursor:pointer;margin-bottom:2px;color:var(--text);user-select:none;transition:background .15s}
+.side-item:hover{background:var(--hover)}
+.side-item.active{font-weight:700;background:var(--hover)}
+.side-item.active svg{stroke-width:2.4;color:var(--red)}
+.side-item svg{flex-shrink:0;transition:color .15s}
+.side-item:hover svg{color:var(--red)}
+.main{min-height:calc(100vh - 64px);width:100%;overflow-x:hidden}
+
+.view{display:none;width:100%;animation:fadeIn .25s ease}
+.view.show{display:block}
+
+.sales-ticker{background:linear-gradient(90deg,#22c55e,#00c9a7);color:#fff;height:38px;display:flex;align-items:center;overflow:hidden;position:relative;font-size:13px;font-weight:700;border-bottom:1px solid var(--border)}
+.sales-ticker .tick-label{background:rgba(0,0,0,.25);padding:0 14px;height:100%;display:flex;align-items:center;gap:6px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;flex-shrink:0;z-index:2}
+.sales-ticker .tick-label::before{content:"";width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1s infinite}
+.tick-track{display:flex;gap:40px;white-space:nowrap;animation:marquee 30s linear infinite;padding-left:20px;flex-shrink:0;will-change:transform}
+.tick-item{display:inline-flex;align-items:center;gap:8px;font-size:13px}
+.tick-item b{background:rgba(0,0,0,.25);padding:2px 8px;border-radius:6px;font-weight:900}
+
+.store-hero{background:linear-gradient(135deg,#833ab4,#e1306c,#fcb045);padding:26px 22px;position:relative;overflow:hidden}
+.store-hero::before{content:"🛍️";position:absolute;top:-20px;right:-10px;font-size:140px;opacity:.15}
+.store-hero h1{font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;margin-bottom:6px;position:relative;z-index:1}
+.store-hero p{font-size:13.5px;color:rgba(255,255,255,.9);margin-bottom:18px;position:relative;z-index:1}
+.hero-stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;position:relative;z-index:1}
+.hero-stat-box{background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:12px;padding:11px 14px;border:1px solid rgba(255,255,255,.2)}
+.hero-stat-box .lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.hero-stat-box .val{font-size:18px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;transition:transform .3s}
+.hero-stat-box .val.bump{animation:countBump .5s ease}
+
+.store-toolbar{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.store-toolbar h2{font-size:17px;font-weight:800;letter-spacing:-.3px;display:flex;align-items:center;gap:10px}
+.auto-live-pill{background:rgba(34,197,94,.15);color:var(--green);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;display:inline-flex;align-items:center;gap:5px}
+.auto-live-pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.2s infinite}
+.btn-add{background:var(--green);color:#fff;padding:11px 20px;border-radius:11px;font-weight:800;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;box-shadow:0 6px 20px rgba(34,197,94,.3)}
+.btn-add:hover{background:#1ea34d;transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,197,94,.4)}
+
+.filter-row{display:flex;gap:8px;padding:14px 22px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border)}
+.filter-row::-webkit-scrollbar{display:none}
+.chip{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:12.5px;font-weight:600;color:var(--text2);white-space:nowrap;cursor:pointer;transition:all .18s}
+.chip:hover{background:var(--hover);color:var(--text);border-color:var(--hover2)}
+.chip.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:700}
+
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:16px;padding:20px 22px 30px}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .22s, box-shadow .22s, border-color .22s;position:relative;animation:cardPop .3s ease}
+.product-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.6);border-color:var(--hover2)}
+.product-card.selling{animation:saleFlash .9s ease}
+.product-img{aspect-ratio:1;background:var(--ig2);display:grid;place-items:center;font-size:80px;position:relative;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover}
+.product-badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;animation:newBadge .4s cubic-bezier(.2,.9,.3,1.3);z-index:2}
+.product-badge.new{background:var(--red);color:#fff}
+.product-badge.sale{background:var(--green);color:#fff}
+.product-stock{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);color:#fff;padding:4px 9px;border-radius:8px;font-size:10.5px;font-weight:800;z-index:2}
+.product-stock.low{background:rgba(255,51,85,.9)}
+.product-stock.out{background:rgba(80,80,80,.9)}
+.sold-popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(34,197,94,.95);color:#fff;padding:8px 16px;border-radius:12px;font-size:13px;font-weight:900;z-index:5;pointer-events:none;box-shadow:0 8px 24px rgba(34,197,94,.6);white-space:nowrap}
+.sold-popup.show{animation:soldPop 1.2s ease forwards}
+.product-body{padding:13px}
+.product-name{font-size:13.5px;font-weight:700;margin-bottom:5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px}
+.product-cat{font-size:10.5px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.product-price-row{display:flex;align-items:baseline;gap:7px;margin-bottom:6px}
+.product-price{font-size:18px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+.product-old{font-size:12px;color:var(--text3);text-decoration:line-through}
+.product-sold{font-size:11px;color:var(--text2);font-weight:600;margin-bottom:10px;padding:5px 0;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center}
+.product-sold b{color:var(--green);font-weight:800}
+.product-sold .count{color:var(--text);font-weight:800;font-size:12px}
+.product-actions{display:flex;gap:6px}
+.product-actions button{padding:9px;border-radius:9px;font-size:12px;font-weight:700;transition:all .15s}
+.btn-sell{background:var(--green);color:#fff;flex:1}
+.btn-sell:hover{background:#1ea34d}
+.btn-sell:disabled{background:var(--elevated);color:var(--text3);cursor:not-allowed}
+.btn-icon{background:var(--elevated);color:var(--text2);flex:0 0 auto;padding:9px 11px !important}
+.btn-icon:hover{background:var(--hover2);color:var(--text)}
+.btn-icon.danger:hover{background:var(--red);color:#fff}
+
+.empty-store{padding:70px 20px;text-align:center;color:var(--text2);grid-column:1/-1}
+.empty-store .icon{font-size:80px;margin-bottom:18px;opacity:.55;animation:bounceIcon 2s ease-in-out infinite}
+.empty-store b{display:block;color:var(--text);font-size:19px;margin-bottom:10px}
+.empty-store p{font-size:14px;margin-bottom:22px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.6}
+.empty-store .hint{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--text);max-width:440px;margin:0 auto 22px;line-height:1.6}
+.empty-store .hint b{color:var(--green)}
+
+.activity-panel{padding:16px 22px;background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.activity-panel h3{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.activity-panel h3::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.2s infinite}
+.activity-list{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.activity-list::-webkit-scrollbar{display:none}
+.activity-item{flex-shrink:0;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:12.5px;min-width:250px;animation:slideInRight .4s ease}
+.activity-item .a-emoji{width:36px;height:36px;border-radius:10px;background:var(--ig2);display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.activity-item .a-info{flex:1;min-width:0}
+.activity-item .a-info b{display:block;font-size:12.5px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.activity-item .a-info span{font-size:11px;color:var(--text2)}
+.activity-item .a-amt{font-size:13px;font-weight:900;color:var(--green);white-space:nowrap}
+
+.wrap{width:100%;max-width:960px;padding:22px 18px;margin:0 auto}
+.page-title{font-size:23px;font-weight:800;margin-bottom:22px;letter-spacing:-.4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.card .lbl{font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.card .val{font-size:26px;font-weight:900;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+.section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px}
+.section h3{font-size:15.5px;font-weight:800;margin-bottom:16px}
+.top-row{display:flex;gap:14px;padding:12px 0;align-items:center;border-bottom:1px solid var(--border)}
+.top-row:last-child{border-bottom:none}
+.top-thumb{width:52px;height:52px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;font-size:24px}
+.top-info{flex:1;min-width:0}
+.top-info b{font-size:13.5px;display:block;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-info span{font-size:11.5px;color:var(--text2)}
+.top-earn{font-size:14px;font-weight:900;color:var(--green);white-space:nowrap}
+
+.hero{background:var(--ig);border-radius:20px;padding:28px;color:#fff;margin-bottom:22px;position:relative;overflow:hidden;box-shadow:0 16px 50px rgba(131,58,180,.4)}
+.hero::before{content:"💰";position:absolute;top:-30px;right:-15px;font-size:150px;opacity:.14}
+.hero .lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;opacity:.92}
+.hero .amt{font-size:46px;font-weight:900;letter-spacing:-2px;margin:8px 0 18px;position:relative;z-index:1;font-variant-numeric:tabular-nums}
+.hero-stats{display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
+.hero-stat{background:rgba(255,255,255,.22);backdrop-filter:blur(10px);border-radius:12px;padding:10px 16px;font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,.15)}
+.hero-stat b{display:block;font-size:15px;font-weight:900;margin-top:3px}
+.withdraw-btn{position:absolute;top:22px;right:22px;background:#fff;color:#000;padding:11px 22px;border-radius:26px;font-weight:800;font-size:13px;z-index:2;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.withdraw-btn:hover{transform:scale(1.05)}
+
+/* ============ LIVE NOW BANNER (Earnings) ============ */
+.live-banner{
+  background:linear-gradient(135deg,rgba(255,51,85,.15),rgba(255,51,85,.05));
+  border:1.5px solid rgba(255,51,85,.4);
+  border-radius:16px;
+  padding:16px 18px;
+  margin-bottom:22px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  animation:liveBannerPulse 2s ease-in-out infinite;
+  position:relative;
+  overflow:hidden;
+}
+.live-banner::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,51,85,.15),transparent);
+  transform:translateX(-100%);
+  animation:slideInRight 2.5s linear infinite;
+}
+.live-dot{
+  width:14px;height:14px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 0 0 rgba(255,51,85,.8);
+  animation:livePulse 1.6s infinite, dotBlink 1.2s infinite;
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+}
+.live-banner-body{flex:1;min-width:0;position:relative;z-index:1}
+.live-banner-body .lb-title{
+  font-size:12px;font-weight:800;color:var(--red);
+  text-transform:uppercase;letter-spacing:1px;
+  display:flex;align-items:center;gap:8px;margin-bottom:5px;
+}
+.live-banner-body .lb-title .tag{
+  background:var(--red);color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;
+}
+.live-banner-body .lb-stats{
+  display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--text2);font-weight:600;
+}
+.live-banner-body .lb-stats .stat{display:flex;align-items:center;gap:5px}
+.live-banner-body .lb-stats .stat b{
+  font-size:14px;font-weight:900;color:var(--text);
+  font-variant-numeric:tabular-nums;letter-spacing:-.3px;
+}
+.live-banner-body .lb-timer{
+  font-family:'SF Mono','Consolas',monospace;
+  font-variant-numeric:tabular-nums;
+  background:rgba(255,51,85,.25);
+  color:#fff;
+  padding:3px 10px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+.live-banner .lb-earn{
+  text-align:right;flex-shrink:0;position:relative;z-index:1;
+}
+.live-banner .lb-earn .lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.live-banner .lb-earn .amt{font-size:22px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-.5px;margin-top:2px}
+
+.tx{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px}
+.tx h3{font-size:15.5px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.tx-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:center}
+.tx-row:last-child{border-bottom:none}
+.tx-ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:21px;flex-shrink:0;position:relative}
+.tx-ic.sale{background:linear-gradient(135deg,#22c55e,#00c9a7);color:#fff}
+.tx-ic.live{background:linear-gradient(135deg,#fd1d1d,#fcb045);color:#fff}
+.tx-ic.live.active{animation:livePulse 1.6s infinite}
+.tx-ic.restock{background:var(--elevated);color:var(--text2)}
+.tx-ic.withdraw{background:linear-gradient(135deg,#3ea6ff,#0077b6);color:#fff}
+.tx-info{flex:1;min-width:0}
+.tx-info b{font-size:13.5px;display:block;margin-bottom:4px}
+.tx-info .tx-meta{font-size:11.5px;color:var(--text2);display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:3px}
+.tx-info .tx-meta .chip-mini{
+  background:var(--card2);
+  padding:2px 8px;
+  border-radius:6px;
+  font-size:10.5px;
+  font-weight:700;
+  color:var(--text2);
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.tx-info .tx-meta .chip-mini.time{
+  background:rgba(255,51,85,.15);
+  color:var(--red);
+}
+.tx-info .tx-meta .chip-mini.dur{
+  background:rgba(62,166,255,.15);
+  color:var(--blue);
+}
+.tx-amt{font-size:15px;font-weight:900;color:var(--green);white-space:nowrap}
+.tx-amt.out{color:var(--text2)}
+.tx-status{padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;text-transform:uppercase;margin:4px 0 0;display:inline-block}
+.tx-status.processing{background:rgba(247,151,30,.16);color:#f7971e}
+.tx-status.completed{background:rgba(34,197,94,.16);color:var(--green)}
+
+.prof-header{display:flex;gap:34px;align-items:center;padding:24px 0;flex-wrap:wrap}
+.prof-av{width:130px;height:130px;border-radius:50%;flex-shrink:0;background:var(--ig);padding:4px}
+.prof-av > div{width:100%;height:100%;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:50px;font-weight:900;overflow:hidden;color:var(--text)}
+.prof-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.prof-info{flex:1;min-width:240px}
+.prof-info .row{display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.prof-info .uname{font-size:22px;font-weight:700}
+.btn-edit{padding:8px 18px;background:var(--elevated);border-radius:9px;font-size:13.5px;font-weight:700}
+.btn-edit:hover{background:var(--hover2)}
+.prof-stats{display:flex;gap:30px;margin-bottom:16px;flex-wrap:wrap}
+.prof-stats .st{font-size:14px}
+.prof-stats .st b{font-weight:800}
+.prof-bio{font-size:14px;line-height:1.55}
+.prof-bio .n{font-weight:700;margin-bottom:3px}
+.prof-bio .b{color:var(--text2)}
+
+.live-ov{position:fixed;inset:0;background:#000;z-index:1000;display:none;flex-direction:column}
+.live-ov.show{display:flex;animation:fadeIn .3s ease}
+.live-view{flex:1;position:relative;background:#0a0a0a;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.live-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+.live-blob.b1{width:460px;height:460px;background:#833ab4;top:-120px;left:-120px}
+.live-blob.b2{width:420px;height:420px;background:#e1306c;bottom:-120px;right:-100px}
+.live-blob.b3{width:360px;height:360px;background:#fcb045;top:40%;left:44%}
+.live-view::before{content:"📸";position:absolute;font-size:240px;opacity:.09;z-index:1}
+.live-top{position:absolute;top:18px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:center;z-index:5;gap:12px;flex-wrap:wrap}
+.live-user{display:flex;gap:11px;align-items:center;background:rgba(0,0,0,.55);backdrop-filter:blur(16px);padding:7px 16px 7px 7px;border-radius:28px;border:1px solid rgba(255,255,255,.1)}
+.live-user .av{width:40px;height:40px;border-radius:50%;background:var(--ig);display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;border:2px solid #fff}
+.live-user .inf b{color:#fff;font-size:14px;display:block}
+.live-user .inf span{color:rgba(255,255,255,.75);font-size:11.5px}
+.live-stats{display:flex;gap:9px;align-items:center}
+.live-badge{background:var(--red);color:#fff;font-size:11.5px;font-weight:800;padding:7px 13px;border-radius:9px;display:flex;gap:6px;align-items:center;animation:livePulse 2s infinite}
+.live-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#fff}
+.live-views{background:rgba(0,0,0,.55);backdrop-filter:blur(16px);color:#fff;font-size:13px;font-weight:700;padding:8px 15px;border-radius:22px;border:1px solid rgba(255,255,255,.1)}
+.live-earn{position:absolute;top:86px;left:18px;background:linear-gradient(135deg,#f7971e,#ffd200);color:#0f0f0f;padding:14px 22px;border-radius:16px;font-weight:800;z-index:5;box-shadow:0 10px 40px rgba(247,151,30,.6)}
+.live-earn .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;opacity:.8;font-weight:800;display:flex;align-items:center;gap:6px}
+.live-earn .lbl .x{background:#0f0f0f;color:#ffd200;padding:1px 7px;border-radius:6px;font-size:10px;font-weight:900}
+.live-earn .amt{font-size:32px;font-weight:900;margin-top:3px}
+.live-chat{position:absolute;bottom:96px;left:18px;right:18px;max-height:44%;display:flex;flex-direction:column;gap:7px;overflow:hidden;z-index:4}
+.live-msg{background:rgba(0,0,0,.6);backdrop-filter:blur(10px);padding:9px 14px;border-radius:20px;color:#fff;font-size:13.5px;display:inline-block;max-width:86%;border:1px solid rgba(255,255,255,.08)}
+.live-msg b{color:#ffd200;margin-right:7px;font-weight:800}
+.gift{position:absolute;bottom:0;font-size:46px;pointer-events:none;animation:giftFall 2.2s ease-out forwards;z-index:6}
+.live-bottom{padding:16px 18px;display:flex;gap:11px;background:rgba(0,0,0,.7);backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,.1);align-items:center}
+.live-bottom input{flex:1;padding:13px 18px;border-radius:26px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:14.5px}
+.live-bottom input::placeholder{color:rgba(255,255,255,.45)}
+.gift-btn{padding:13px 18px;background:linear-gradient(135deg,#833ab4,#e1306c);color:#fff;border-radius:26px;font-weight:800;font-size:14px}
+.live-bottom .end{padding:13px 22px;background:var(--red);color:#fff;border-radius:26px;font-weight:800;font-size:13.5px}
+
+.mb{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:950;display:none;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease}
+.mb.show{display:flex}
+.mbox{background:var(--card);border-radius:18px;width:100%;max-width:540px;max-height:92vh;overflow-y:auto;border:1px solid var(--border);animation:popIn .3s cubic-bezier(.2,.9,.3,1.3);box-shadow:var(--shadow)}
+.mhead{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--card);z-index:5;border-radius:18px 18px 0 0}
+.mhead h2{font-size:17.5px;font-weight:800}
+.mclose{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--hover);font-size:17px}
+.mclose:hover{background:var(--hover2)}
+.mbody{padding:22px}
+.mfoot{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:11px;justify-content:flex-end;position:sticky;bottom:0;background:var(--card);border-radius:0 0 18px 18px}
+.flbl{font-size:13px;font-weight:700;display:block;margin-bottom:7px;color:var(--text2)}
+.finp{width:100%;padding:12px 15px;border-radius:11px;border:1px solid var(--border);background:var(--bg);font-size:14px;margin-bottom:16px;transition:border-color .2s}
+.finp:focus{border-color:var(--blue);background:var(--card2)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{padding:10px 20px;border-radius:11px;font-size:14px;font-weight:700;display:inline-flex;gap:7px;align-items:center;justify-content:center}
+.btn-primary{background:var(--blue);color:#0f0f0f}
+.btn-secondary{background:var(--elevated);color:var(--text)}
+.btn-green{background:var(--green);color:#fff}
+
+.emoji-picker{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:16px}
+.emoji-pick{aspect-ratio:1;border-radius:9px;background:var(--card2);border:2px solid transparent;display:grid;place-items:center;font-size:22px;cursor:pointer;transition:all .15s}
+.emoji-pick:hover{background:var(--hover2);transform:scale(1.08)}
+.emoji-pick.selected{border-color:var(--blue);background:rgba(62,166,255,.15)}
+
+.price-preview{background:var(--card2);border-radius:11px;padding:14px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px}
+.price-preview .pp-row{display:flex;justify-content:space-between;align-items:baseline}
+.price-preview .pp-row span{color:var(--text2);font-weight:600}
+.price-preview .pp-row b{font-weight:800;color:var(--green)}
+.price-preview .pp-row b.neg{color:var(--red)}
+
+.toast{position:fixed;bottom:86px;left:50%;transform:translate(-50%,140px);background:var(--text);color:var(--bg);padding:14px 24px;border-radius:28px;font-size:14.5px;font-weight:700;z-index:9999;box-shadow:var(--shadow);opacity:0;transition:all .4s cubic-bezier(.2,.9,.3,1.3);pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{transform:translate(-50%,0);opacity:1}
+.toast.money{background:var(--gold);color:#0f0f0f;animation:moneyPop .5s ease}
+.toast.sale{background:var(--green);color:#fff;animation:moneyPop .5s ease}
+
+.notif-item{display:flex;gap:13px;padding:13px;border-radius:11px;cursor:pointer;align-items:flex-start;transition:background .15s}
+.notif-item:hover{background:var(--hover)}
+.notif-item .ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:21px;color:#fff;flex-shrink:0}
+.empty{padding:44px 20px;text-align:center;color:var(--text2);font-size:14px}
+.empty .icon{font-size:64px;margin-bottom:16px;opacity:.45}
+.empty b{display:block;color:var(--text);margin-bottom:7px;font-size:15.5px}
+
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;height:58px;background:var(--bg);border-top:1px solid var(--border);z-index:850;justify-content:space-around;align-items:center;padding:0 6px}
+.mnav .nb{flex:1;height:100%;display:grid;place-items:center;color:var(--text2)}
+.mnav .nb.active{color:var(--text)}
+.mnav .nb.active svg{stroke-width:2.4}
+
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .mnav{display:flex}
+  .prof-av{width:96px;height:96px}
+  .prof-info .uname{font-size:18px}
+  .hero .amt{font-size:36px}
+  .hero .withdraw-btn{top:16px;right:16px;padding:9px 16px;font-size:12px}
+  .product-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;padding:16px 14px 30px}
+  .store-hero{padding:20px 16px}
+  .store-toolbar{padding:14px 16px}
+  .filter-row{padding:12px 16px}
+  .activity-panel{padding:14px 16px}
+  .live-earn .amt{font-size:26px}
+  .live-earn{padding:11px 18px;top:78px}
+  .frow{grid-template-columns:1fr}
+  .live-banner{flex-direction:column;align-items:flex-start}
+  .live-banner .lb-earn{text-align:left;width:100%;border-top:1px solid rgba(255,51,85,.3);padding-top:10px;margin-top:10px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo" onclick="switchTab('store')">InstaBook</div>
+  <div class="top-spacer"></div>
+  <button class="top-btn" onclick="openNotifications()" title="Notifications">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span class="top-badge" id="notifBadge" data-empty="true">0</span>
+  </button>
+  <button class="top-btn" onclick="switchTab('earnings')" title="Earnings">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    <span class="top-live-dot" id="topLiveDot" style="display:none"></span>
+  </button>
+  <div class="top-avatar" id="topAvatar" onclick="switchTab('profile')"><div>A</div></div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="side-item active" data-tab="store" onclick="switchTab('store')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 9h18"/><path d="M9 22V12h6v10"/></svg>
+      <span>My Store</span>
+    </div>
+    <div class="side-item" data-tab="earnings" onclick="switchTab('earnings')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Earnings</span>
+    </div>
+    <div class="side-item" data-tab="analytics" onclick="switchTab('analytics')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 4 3 5-7"/></svg>
+      <span>Analytics</span>
+    </div>
+    <div class="side-item" data-tab="profile" onclick="switchTab('profile')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      <span>Profile</span>
+    </div>
+    <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--border)">
+      <button class="btn btn-green" style="width:100%" onclick="openAddProduct()">➕ Add Product</button>
+      <button class="btn" style="width:100%;margin-top:9px;background:var(--red);color:#fff" onclick="startLive()">🔴 Go Live</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div id="storeView" class="view show">
+      <div class="sales-ticker" id="salesTicker">
+        <div class="tick-label">LIVE SALES</div>
+        <div class="tick-track" id="tickTrack"></div>
+      </div>
+
+      <div class="store-hero">
+        <h1>🛍️ My Clothing Store</h1>
+        <p>Product add karein — sales automatically hoti rahengi. Har sale par aapko paisa milega!</p>
+        <div class="hero-stats-row">
+          <div class="hero-stat-box"><div class="lbl">Products</div><div class="val" id="statProducts">0</div></div>
+          <div class="hero-stat-box"><div class="lbl">In Stock</div><div class="val" id="statStock">0</div></div>
+          <div class="hero-stat-box"><div class="lbl">Sold</div><div class="val" id="statSold">0</div></div>
+          <div class="hero-stat-box"><div class="lbl">Revenue</div><div class="val" id="statRevenue">₹0</div></div>
+        </div>
+      </div>
+
+      <div class="store-toolbar">
+        <h2>My Products <span class="auto-live-pill">Auto-Selling</span></h2>
+        <button class="btn-add" onclick="openAddProduct()">➕ Add Product</button>
+      </div>
+
+      <div class="filter-row" id="storeFilter">
+        <div class="chip active" data-cat="all" onclick="setStoreFilter('all')">All</div>
+        <div class="chip" data-cat="shirt" onclick="setStoreFilter('shirt')">👕 Shirts</div>
+        <div class="chip" data-cat="tshirt" onclick="setStoreFilter('tshirt')">👚 T-Shirts</div>
+        <div class="chip" data-cat="jeans" onclick="setStoreFilter('jeans')">👖 Jeans</div>
+        <div class="chip" data-cat="jacket" onclick="setStoreFilter('jacket')">🧥 Jackets</div>
+        <div class="chip" data-cat="dress" onclick="setStoreFilter('dress')">👗 Dresses</div>
+        <div class="chip" data-cat="saree" onclick="setStoreFilter('saree')">🥻 Sarees</div>
+        <div class="chip" data-cat="kurta" onclick="setStoreFilter('kurta')">👘 Kurtas</div>
+        <div class="chip" data-cat="shoes" onclick="setStoreFilter('shoes')">👟 Shoes</div>
+        <div class="chip" data-cat="accessory" onclick="setStoreFilter('accessory')">👜 Accessories</div>
+      </div>
+
+      <div class="activity-panel" id="activityPanel" style="display:none">
+        <h3>Recent Sales Activity</h3>
+        <div class="activity-list" id="activityList"></div>
+      </div>
+
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+
+    <div id="analyticsView" class="view"><div class="wrap" id="analyticsContent"></div></div>
+    <div id="earningsView" class="view"><div class="wrap" id="earningsContent"></div></div>
+    <div id="profileView" class="view"><div class="wrap" id="profileContent"></div></div>
+  </main>
+</div>
+
+<nav class="mnav">
+  <button class="nb active" data-tab="store" onclick="switchTab('store')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 9h18"/><path d="M9 22V12h6v10"/></svg></button>
+  <button class="nb" data-tab="earnings" onclick="switchTab('earnings')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></button>
+  <button class="nb" data-tab="analytics" onclick="switchTab('analytics')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 4 3 5-7"/></svg></button>
+  <button class="nb" data-tab="profile" onclick="switchTab('profile')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
+</nav>
+
+<!-- LIVE OVERLAY -->
+<div class="live-ov" id="liveOverlay">
+  <div class="live-view" id="liveView">
+    <div class="live-blob b1"></div><div class="live-blob b2"></div><div class="live-blob b3"></div>
+    <div class="live-top">
+      <div class="live-user"><div class="av" id="liveAv">A</div><div class="inf"><b id="liveNm">Aap</b><span id="liveTime">00:00</span></div></div>
+      <div class="live-stats"><div class="live-badge">LIVE</div><div class="live-views">👁️ <span id="liveViewers">0</span></div></div>
+    </div>
+    <div class="live-earn">
+      <div class="lbl">🔥 LIVE EARNING <span class="x">1000x</span></div>
+      <div class="amt" id="liveEarnings">₹0</div>
+    </div>
+    <div class="live-chat" id="liveChat"></div>
+  </div>
+  <div class="live-bottom">
+    <input id="liveInput" placeholder="Comment likhein..." onkeydown="if(event.key==='Enter')sendLiveComment()"/>
+    <button class="gift-btn" onclick="manualGift()">🎁</button>
+    <button class="end" onclick="endLive()">End Live</button>
+  </div>
+</div>
+
+<div class="mb" id="notifModal"><div class="mbox"><div class="mhead"><h2>Notifications</h2><button class="mclose" onclick="closeModal('notifModal')">✕</button></div><div class="mbody" id="notifBody" style="padding:8px"></div></div></div>
+
+<div class="mb" id="addProductModal">
+  <div class="mbox">
+    <div class="mhead"><h2>➕ Add New Product</h2><button class="mclose" onclick="closeModal('addProductModal')">✕</button></div>
+    <div class="mbody">
+      <label class="flbl">Choose Emoji / Icon</label>
+      <div class="emoji-picker" id="emojiPicker"></div>
+      <label class="flbl">Product Image URL (optional)</label>
+      <input id="pImage" class="finp" placeholder="https://... (blank = emoji use hoga)"/>
+      <label class="flbl">Product Name *</label>
+      <input id="pName" class="finp" placeholder="e.g. Cotton Casual Shirt"/>
+      <label class="flbl">Category *</label>
+      <select id="pCat" class="finp">
+        <option value="shirt">👕 Shirt</option>
+        <option value="tshirt">👚 T-Shirt</option>
+        <option value="jeans">👖 Jeans</option>
+        <option value="jacket">🧥 Jacket</option>
+        <option value="dress">👗 Dress</option>
+        <option value="saree">🥻 Saree</option>
+        <option value="kurta">👘 Kurta</option>
+        <option value="shoes">👟 Shoes</option>
+        <option value="accessory">👜 Accessory</option>
+      </select>
+      <div class="frow">
+        <div>
+          <label class="flbl">Selling Price (₹) *</label>
+          <input id="pPrice" type="number" class="finp" placeholder="999" min="1" oninput="updatePricePreview()"/>
+        </div>
+        <div>
+          <label class="flbl">MRP (₹)</label>
+          <input id="pOldPrice" type="number" class="finp" placeholder="1499" min="0" oninput="updatePricePreview()"/>
+        </div>
+      </div>
+      <div class="frow">
+        <div>
+          <label class="flbl">Cost Price (₹)</label>
+          <input id="pCost" type="number" class="finp" placeholder="500" min="0" oninput="updatePricePreview()"/>
+        </div>
+        <div>
+          <label class="flbl">Stock Quantity *</label>
+          <input id="pStock" type="number" class="finp" placeholder="10" min="1" oninput="updatePricePreview()"/>
+        </div>
+      </div>
+      <div class="price-preview" id="pricePreview">
+        <div class="pp-row"><span>💰 Profit / unit</span><b id="ppProfit">₹0</b></div>
+        <div class="pp-row"><span>📦 Total stock value</span><b id="ppStock">₹0</b></div>
+        <div class="pp-row"><span>💵 Potential revenue</span><b id="ppRevenue">₹0</b></div>
+        <div class="pp-row"><span>📊 Margin</span><b id="ppMargin">0%</b></div>
+      </div>
+      <label class="flbl">Description</label>
+      <textarea id="pDesc" class="finp" rows="2" placeholder="Fabric, fit, size info..." style="resize:vertical"></textarea>
+    </div>
+    <div class="mfoot"><button class="btn btn-secondary" onclick="closeModal('addProductModal')">Cancel</button><button class="btn btn-green" onclick="saveProduct()">✅ Add to Store</button></div>
+  </div>
+</div>
+
+<div class="mb" id="editProfileModal">
+  <div class="mbox">
+    <div class="mhead"><h2>Edit Profile</h2><button class="mclose" onclick="closeModal('editProfileModal')">✕</button></div>
+    <div class="mbody">
+      <label class="flbl">Profile Picture URL</label>
+      <input id="epAvatar" class="finp" placeholder="https://..."/>
+      <label class="flbl">Name</label><input id="epName" class="finp"/>
+      <label class="flbl">Username</label><input id="epUsername" class="finp"/>
+      <label class="flbl">Bio</label><textarea id="epBio" class="finp" rows="3" style="resize:vertical"></textarea>
+    </div>
+    <div class="mfoot"><button class="btn btn-secondary" onclick="closeModal('editProfileModal')">Cancel</button><button class="btn btn-primary" onclick="saveProfile()">Save</button></div>
+  </div>
+</div>
+
+<div class="mb" id="withdrawModal">
+  <div class="mbox">
+    <div class="mhead"><h2>💸 Withdraw</h2><button class="mclose" onclick="closeModal('withdrawModal')">✕</button></div>
+    <div class="mbody">
+      <div style="background:var(--card2);border-radius:12px;padding:18px;margin-bottom:20px;text-align:center">
+        <div style="font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Available Balance</div>
+        <div style="font-size:34px;font-weight:900;color:var(--green)" id="wdBalance">₹0</div>
+      </div>
+      <label class="flbl">Withdraw to</label>
+      <select id="wdMethod" class="finp"><option value="upi">UPI</option><option value="bank">Bank Account</option></select>
+      <label class="flbl">Amount (Min ₹500)</label>
+      <input id="wdAmount" type="number" class="finp" placeholder="500" min="500"/>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('wdAmount').value=500">₹500</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('wdAmount').value=1000">₹1K</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('wdAmount').value=5000">₹5K</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('wdAmount').value=Math.floor(getBalance())">Max</button>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn btn-secondary" onclick="closeModal('withdrawModal')">Cancel</button><button class="btn btn-green" onclick="doWithdraw()">Withdraw</button></div>
+  </div>
+</div>
+
+<div class="mb" id="restockModal">
+  <div class="mbox">
+    <div class="mhead"><h2>➕ Restock Product</h2><button class="mclose" onclick="closeModal('restockModal')">✕</button></div>
+    <div class="mbody">
+      <div id="restockInfo" style="margin-bottom:18px"></div>
+      <label class="flbl">Add Quantity</label>
+      <input id="restockQty" type="number" class="finp" placeholder="10" min="1" value="10"/>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('restockQty').value=5">+5</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('restockQty').value=10">+10</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('restockQty').value=25">+25</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('restockQty').value=50">+50</button>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn btn-secondary" onclick="closeModal('restockModal')">Cancel</button><button class="btn btn-green" onclick="doRestock()">Restock</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   INSTABOOK v5 — Auto-selling store + live time tracking
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const $$ = sel => document.querySelectorAll(sel);
+const rand = a => a[Math.floor(Math.random()*a.length)];
+const esc = s => String(s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+const LIVE_MULTIPLIER = 1000;
+
+const fmt = n => {
+  n = Math.max(0, Math.floor(n||0));
+  if(n >= 1e9) return (n/1e9).toFixed(2).replace(/\.00$/,"")+"B";
+  if(n >= 1e7) return (n/1e7).toFixed(2).replace(/\.00$/,"")+"Cr";
+  if(n >= 1e5) return (n/1e5).toFixed(1).replace(/\.0$/,"")+"L";
+  if(n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,"")+"K";
+  return String(n);
+};
+const money = (n, d=2) => "₹" + Number(n||0).toLocaleString("en-IN", {minimumFractionDigits:d, maximumFractionDigits:d});
+const moneyShort = n => {
+  n = Math.max(0, Number(n)||0);
+  if(n === 0) return "₹0";
+  if(n >= 1e7) return "₹" + (n/1e7).toFixed(2).replace(/\.00$/,"") + "Cr";
+  if(n >= 1e5) return "₹" + (n/1e5).toFixed(1).replace(/\.0$/,"") + "L";
+  if(n >= 1e3) return "₹" + (n/1e3).toFixed(1).replace(/\.0$/,"") + "K";
+  return "₹" + n.toFixed(2);
+};
+const timeAgo = ts => {
+  const d = Math.floor((Date.now()-ts)/1000);
+  if(d < 5) return "just now";
+  if(d < 60) return d+"s ago";
+  if(d < 3600) return Math.floor(d/60)+"m ago";
+  if(d < 86400) return Math.floor(d/3600)+"h ago";
+  if(d < 604800) return Math.floor(d/86400)+"d ago";
+  return new Date(ts).toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+};
+/* Format a timestamp as "10:30 AM" */
+const formatClock = ts => {
+  return new Date(ts).toLocaleTimeString('en-IN', {hour:'numeric', minute:'2-digit', hour12:true});
+};
+/* Format a duration in seconds as "15m 32s" */
+const formatDuration = secs => {
+  secs = Math.max(0, Math.floor(secs));
+  const m = Math.floor(secs/60);
+  const s = secs % 60;
+  if(m === 0) return `${s}s`;
+  if(s === 0) return `${m}m`;
+  return `${m}m ${s}s`;
+};
+/* Format duration as MM:SS for live timer */
+const formatTimer = secs => {
+  secs = Math.max(0, Math.floor(secs));
+  const m = String(Math.floor(secs/60)).padStart(2,'0');
+  const s = String(secs%60).padStart(2,'0');
+  return `${m}:${s}`;
+};
+
+let toastTimer;
+function toast(msg, cls){
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (cls ? " " + cls : "");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
+}
+function closeModal(id){ $(id).classList.remove("show"); }
+
+const GRADS = [
+  "linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)","linear-gradient(135deg,#405de6,#833ab4)",
+  "linear-gradient(135deg,#e1306c,#fcb045)","linear-gradient(135deg,#00c9a7,#00b4d8)",
+  "linear-gradient(135deg,#fd1d1d,#fcb045)","linear-gradient(135deg,#833ab4,#405de6)",
+  "linear-gradient(135deg,#f7971e,#ffd200)","linear-gradient(135deg,#00b4d8,#0077b6)"
+];
+const PRODUCT_EMOJIS = ["👕","👚","👖","🧥","👗","🥻","👘","👟","👜","👠","🧣","🧢","🕶️","💍","👒","🩳","🧦","👔","🎽","👞"];
+const FANS = ["Rahul","Priya","Amit","Sneha","Vikram","Kavya","Arjun","Rohit","Anjali","Karan","Pooja","Nikhil","Tina","Sameer","Neha","Manish","Divya","Raj","Simran","Aryan","Ishita","Aditya","Meera","Varun","Sakshi","Rohan","Deepika","Ankit","Riya","Yash","Aditi","Kabir","Sonal","Harsh","Isha","Siddharth","Tanvi","Vivek","Nisha","Akash"];
+const CITIES = ["Mumbai","Delhi","Bangalore","Pune","Hyderabad","Chennai","Kolkata","Jaipur","Ahmedabad","Lucknow","Chandigarh","Indore","Surat","Kochi","Goa","Manali"];
+const CAT_EMOJI = { shirt:"👕", tshirt:"👚", jeans:"👖", jacket:"🧥", dress:"👗", saree:"🥻", kurta:"👘", shoes:"👟", accessory:"👜" };
+
+const STORE = "instabook-store-v5";
+const state = {
+  theme: "dark",
+  user: { name:"Aap", username:"your_instagram", bio:"Clothing brand owner 🛍️", avatar:"", emoji:"A", followers:0, following:0 },
+  products: [],
+  notifications: [],
+  transactions: [],
+  balance: 0,
+  nextProductId: 1,
+  nextTxId: 1,
+  analytics: { totalEarnings:0, dailyViews:[0,0,0,0,0,0,0] },
+  live: { active:false, viewers:0, startedAt:null, earnings:0, gifts:0, chat:[] },
+  storeFilter: "all",
+  pendingRestockId: null,
+  newEmoji: "👕",
+  recentSales: []
+};
+
+function save(){
+  try{
+    localStorage.setItem(STORE, JSON.stringify({
+      user: state.user, products: state.products,
+      notifications: state.notifications.slice(0,30),
+      transactions: state.transactions.slice(0,200),
+      balance: state.balance, nextProductId: state.nextProductId,
+      nextTxId: state.nextTxId,
+      analytics: state.analytics, theme: state.theme,
+      recentSales: state.recentSales.slice(0,20)
+    }));
+  }catch(e){}
+}
+function load(){
+  try{ const raw = localStorage.getItem(STORE); if(raw) Object.assign(state, JSON.parse(raw)); }catch(e){}
+  if(!state.products) state.products = [];
+  if(!state.notifications) state.notifications = [];
+  if(!state.transactions) state.transactions = [];
+  if(!state.analytics) state.analytics = { totalEarnings:0, dailyViews:[0,0,0,0,0,0,0] };
+  if(!state.user) state.user = { name:"Aap", username:"your_instagram", bio:"Clothing brand owner 🛍️", avatar:"", emoji:"A", followers:0, following:0 };
+  if(!state.nextProductId) state.nextProductId = 1;
+  if(!state.recentSales) state.recentSales = [];
+}
+
+function getBalance(){
+  const withdrawn = state.transactions.filter(t => t.type === 'withdraw' && t.status !== 'rejected').reduce((s,t) => s + t.amount, 0);
+  return Math.max(0, state.balance - withdrawn);
+}
+
+/* ============ AUTO-SELLER ============ */
+let saleInterval;
+function startAutoSeller(){
+  if(saleInterval) clearInterval(saleInterval);
+  saleInterval = setInterval(() => {
+    const sellable = state.products.filter(p => p.stock > 0);
+    if(!sellable.length) return;
+    let salesThisTick = 0;
+    const maxSales = 3 + Math.floor(Math.random() * 4);
+    for(let i = 0; i < maxSales; i++){
+      if(Math.random() > 0.55) continue;
+      const sellableNow = state.products.filter(p => p.stock > 0);
+      if(!sellableNow.length) break;
+      const product = rand(sellableNow);
+      const qty = Math.random() < 0.25 ? 2 : 1;
+      performSale(product, qty);
+      salesThisTick++;
+    }
+    if(salesThisTick > 0){
+      save();
+      updateStoreStats();
+      if($("storeView").classList.contains("show")) renderStore();
+      updateActivityPanel();
+    }
+  }, 1200);
+}
+
+function performSale(p, qty){
+  const sellQty = Math.min(qty, p.stock);
+  if(sellQty <= 0) return;
+  const revenue = p.price * sellQty;
+  const profit = (p.price - (p.cost||0)) * sellQty;
+  p.stock -= sellQty;
+  p.sold += sellQty;
+  p.revenue += revenue;
+  state.balance += revenue;
+  state.analytics.totalEarnings += revenue;
+
+  const buyer = rand(FANS);
+  const city = rand(CITIES);
+
+  addTx({
+    type: 'sale', amount: revenue,
+    desc: `${buyer} (${city}) bought ${p.name} × ${sellQty} · Profit ${money(profit)}`,
+    icon: '🛍️', status: 'completed'
+  });
+
+  state.recentSales.unshift({
+    buyer, city, productName: p.name, emoji: p.emoji,
+    qty: sellQty, amount: revenue, time: Date.now()
+  });
+  if(state.recentSales.length > 20) state.recentSales.pop();
+
+  flashProductSold(p.id, sellQty, revenue);
+
+  if(Math.random() < 0.35){
+    pushNotif(`🛍️ ${buyer} ne order kiya!`, `${p.name} × ${sellQty} — ${money(revenue)} · ${city}`, "🛍️", "#22c55e");
+  }
+  if(Math.random() < 0.35){
+    toast(`💸 ${buyer} ne kharida ${p.name} × ${sellQty} — +${money(revenue)}`, "sale");
+  }
+}
+
+function flashProductSold(productId, qty, amount){
+  const card = document.querySelector(`.product-card[data-pid="${productId}"]`);
+  if(!card) return;
+  card.classList.add("selling");
+  setTimeout(() => card.classList.remove("selling"), 900);
+  const pop = document.createElement('div');
+  pop.className = 'sold-popup';
+  pop.textContent = `+${money(amount,0)} 🎉`;
+  card.appendChild(pop);
+  setTimeout(() => pop.classList.add("show"), 10);
+  setTimeout(() => pop.remove(), 1500);
+}
+
+/* ============ STORE RENDER ============ */
+function renderStore(){
+  const grid = $("productGrid"); if(!grid) return;
+  updateStoreStats();
+  updateActivityPanel();
+  const filter = state.storeFilter;
+  const list = filter === "all" ? state.products : state.products.filter(p => p.cat === filter);
+  if(!list.length){
+    grid.innerHTML = `<div class="empty-store">
+      <div class="icon">🛍️</div>
+      <b>${filter === "all" ? "Store abhi khali hai!" : "Is category mein koi product nahi"}</b>
+      <p>Apna pehla clothing product add karein. Aap khud naam, price, stock set karein.</p>
+      <div class="hint">💡 <b>Jaise hi aap product add karoge, wo apne aap bikna shuru ho jayega.</b> Har sale par paisa aapke balance mein add hoga.</div>
+      <button class="btn btn-green" style="padding:13px 26px;font-size:15px" onclick="openAddProduct()">➕ Add Your First Product</button>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p => {
+    const stockCls = p.stock <= 0 ? 'out' : (p.stock < 5 ? 'low' : '');
+    const stockTxt = p.stock <= 0 ? '❌ Out' : `${p.stock} left`;
+    const discount = (p.oldPrice && p.oldPrice > p.price) ? Math.round(((p.oldPrice - p.price)/p.oldPrice)*100) : 0;
+    const isNew = (Date.now() - p.time) < 24*3600000;
+    const badge = isNew ? `<div class="product-badge new">NEW</div>` :
+                 (discount > 0 ? `<div class="product-badge sale">-${discount}%</div>` : '');
+    return `
+      <div class="product-card" data-pid="${p.id}">
+        <div class="product-img">
+          ${p.image ? `<img src="${esc(p.image)}" onerror="this.style.display='none';this.parentElement.innerHTML='${p.emoji}'"/>` : p.emoji}
+          ${badge}
+          <div class="product-stock ${stockCls}">${stockTxt}</div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">${esc(p.name)}</div>
+          <div class="product-cat">${CAT_EMOJI[p.cat]||''} ${esc(p.cat)}</div>
+          <div class="product-price-row">
+            <span class="product-price">${money(p.price,0)}</span>
+            ${p.oldPrice && p.oldPrice > p.price ? `<span class="product-old">${money(p.oldPrice,0)}</span>` : ''}
+          </div>
+          <div class="product-sold">
+            <span>📦 <span class="count">${p.sold}</span> sold</span>
+            <span>💰 <b>${moneyShort(p.revenue)}</b></span>
+          </div>
+          <div class="product-actions">
+            <button class="btn-sell" ${p.stock <= 0 ? 'disabled' : ''} onclick="quickSell(${p.id})">${p.stock <= 0 ? 'Out of Stock' : '💸 Sell Now'}</button>
+            <button class="btn-icon" onclick="openRestock(${p.id})" title="Restock">➕</button>
+            <button class="btn-icon danger" onclick="deleteProduct(${p.id})" title="Delete">🗑️</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function updateStoreStats(){
+  const totalProducts = state.products.length;
+  const totalStock = state.products.reduce((s,p)=>s+p.stock,0);
+  const totalSold = state.products.reduce((s,p)=>s+p.sold,0);
+  const totalRevenue = state.products.reduce((s,p)=>s+p.revenue,0);
+  setStat("statProducts", totalProducts, false);
+  setStat("statStock", totalStock, false);
+  setStat("statSold", totalSold, true);
+  setStat("statRevenue", moneyShort(totalRevenue), true);
+}
+function setStat(id, val, bump){
+  const el = $(id); if(!el) return;
+  if(el.textContent !== String(val)){
+    el.textContent = val;
+    if(bump){ el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
+  }
+}
+
+function updateActivityPanel(){
+  const panel = $("activityPanel"); if(!panel) return;
+  const list = $("activityList"); if(!list) return;
+  if(!state.recentSales.length){ panel.style.display = "none"; return; }
+  panel.style.display = "block";
+  list.innerHTML = state.recentSales.slice(0, 10).map(s => `
+    <div class="activity-item">
+      <div class="a-emoji">${s.emoji}</div>
+      <div class="a-info">
+        <b>${esc(s.productName)} × ${s.qty}</b>
+        <span>${esc(s.buyer)} · ${esc(s.city)} · ${timeAgo(s.time)}</span>
+      </div>
+      <div class="a-amt">+${money(s.amount,0)}</div>
+    </div>
+  `).join("");
+}
+
+function updateSalesTicker(){
+  const track = $("tickTrack"); if(!track) return;
+  const items = state.recentSales.slice(0, 15);
+  if(!items.length){
+    track.innerHTML = `<span class="tick-item">🛍️ Add a product to start selling — Sales will appear here automatically</span>`;
+    return;
+  }
+  const doubled = [...items, ...items];
+  track.innerHTML = doubled.map(s => `
+    <span class="tick-item">🎉 <b>${esc(s.buyer)}</b> from ${esc(s.city)} bought <b>${esc(s.productName)}</b> × ${s.qty} · <b>+${money(s.amount,0)}</b></span>
+  `).join("");
+}
+
+/* ============ USER ACTIONS ============ */
+function setStoreFilter(cat){
+  state.storeFilter = cat;
+  $$(".filter-row .chip").forEach(c => c.classList.toggle("active", c.dataset.cat === cat));
+  renderStore();
+}
+function quickSell(id){
+  const p = state.products.find(x => x.id === id); if(!p || p.stock <= 0) return;
+  performSale(p, 1);
+  save(); renderStore();
+}
+function deleteProduct(id){
+  const p = state.products.find(x => x.id === id); if(!p) return;
+  if(!confirm(`Delete "${p.name}"? Ye undo nahi hoga.`)) return;
+  state.products = state.products.filter(x => x.id !== id);
+  save(); renderStore();
+  toast("🗑️ Product deleted");
+}
+function openRestock(id){
+  const p = state.products.find(x => x.id === id); if(!p) return;
+  state.pendingRestockId = id;
+  $("restockInfo").innerHTML = `
+    <div style="display:flex;gap:12px;align-items:center;background:var(--card2);border-radius:12px;padding:12px">
+      <div style="width:56px;height:56px;border-radius:10px;background:var(--ig2);display:grid;place-items:center;font-size:26px">${p.emoji}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:14px;margin-bottom:3px">${esc(p.name)}</div>
+        <div style="font-size:12px;color:var(--text2)">Current stock: <b style="color:var(--text)">${p.stock}</b> · Cost: <b style="color:var(--text)">${money(p.cost||0,0)}</b></div>
+      </div>
+    </div>`;
+  $("restockQty").value = 10;
+  $("restockModal").classList.add("show");
+}
+function doRestock(){
+  const p = state.products.find(x => x.id === state.pendingRestockId); if(!p) return;
+  const qty = parseInt($("restockQty").value) || 0;
+  if(qty <= 0){ toast("⚠️ Enter valid quantity"); return; }
+  const cost = (p.cost||0) * qty;
+  const bal = getBalance();
+  if(cost > bal){ toast(`⚠️ Insufficient balance (${money(bal)}). Need ${money(cost)}`); return; }
+  addTx({ type:'restock', amount: cost, desc:`Restock: ${p.name} × ${qty}`, icon:'📦', status:'completed' });
+  state.balance -= cost;
+  p.stock += qty;
+  save(); closeModal('restockModal'); renderStore();
+  toast(`📦 +${qty} stock added (cost ${money(cost)})`);
+}
+
+/* ============ ADD PRODUCT ============ */
+function openAddProduct(){
+  state.newEmoji = rand(PRODUCT_EMOJIS);
+  renderEmojiPicker();
+  $("pImage").value = "";
+  $("pName").value = "";
+  $("pPrice").value = "";
+  $("pOldPrice").value = "";
+  $("pCost").value = "";
+  $("pStock").value = "";
+  $("pDesc").value = "";
+  $("pCat").value = "shirt";
+  updatePricePreview();
+  $("addProductModal").classList.add("show");
+}
+function renderEmojiPicker(){
+  const picker = $("emojiPicker"); if(!picker) return;
+  picker.innerHTML = PRODUCT_EMOJIS.map(e => `
+    <div class="emoji-pick ${e === state.newEmoji ? 'selected' : ''}" onclick="pickEmoji('${e}')">${e}</div>
+  `).join("");
+}
+function pickEmoji(e){ state.newEmoji = e; renderEmojiPicker(); }
+function updatePricePreview(){
+  const price = parseFloat($("pPrice")?.value) || 0;
+  const cost = parseFloat($("pCost")?.value) || 0;
+  const stock = parseInt($("pStock")?.value) || 0;
+  const profit = price - cost;
+  const margin = price > 0 ? ((profit/price)*100) : 0;
+  const pp1 = $("ppProfit"); if(pp1){ pp1.textContent = money(profit,0); pp1.className = profit < 0 ? 'neg' : ''; }
+  const pp2 = $("ppStock"); if(pp2) pp2.textContent = money(cost*stock,0);
+  const pp3 = $("ppRevenue"); if(pp3) pp3.textContent = money(price*stock,0);
+  const pp4 = $("ppMargin"); if(pp4){ pp4.textContent = margin.toFixed(0)+"%"; pp4.className = margin < 0 ? 'neg' : ''; }
+}
+function saveProduct(){
+  const name = $("pName").value.trim();
+  const cat = $("pCat").value;
+  const price = parseFloat($("pPrice").value) || 0;
+  const oldPrice = parseFloat($("pOldPrice").value) || 0;
+  const cost = parseFloat($("pCost").value) || 0;
+  const stock = parseInt($("pStock").value) || 0;
+  const desc = $("pDesc").value.trim() || "Premium quality";
+  const image = $("pImage").value.trim();
+
+  if(!name){ toast("⚠️ Product name daalein"); return; }
+  if(price <= 0){ toast("⚠️ Selling price daalein"); return; }
+  if(stock <= 0){ toast("⚠️ Stock quantity daalein"); return; }
+
+  const product = {
+    id: state.nextProductId++,
+    name, cat,
+    emoji: state.newEmoji,
+    image: image || null,
+    price, oldPrice: oldPrice || 0, cost,
+    stock, sold: 0, revenue: 0,
+    desc, time: Date.now()
+  };
+  state.products.unshift(product);
+  save();
+  closeModal('addProductModal');
+  setStoreFilter('all');
+  renderStore();
+  toast(`🎉 "${name}" added! Ab ye apne aap bikna shuru hoga`, "sale");
+  pushNotif("🛍️ New Product Live", `${name} — ${money(price)} · Stock ${stock}`, "🛍️", "#22c55e");
+}
+
+/* ============ NAV ============ */
+function switchTab(tab){
+  $$(".view").forEach(v => v.classList.remove("show"));
+  const map = { store:"storeView", analytics:"analyticsView", earnings:"earningsView", profile:"profileView" };
+  if(map[tab]) $(map[tab]).classList.add("show");
+  $$(".side-item").forEach(s => s.classList.toggle("active", s.dataset.tab === tab));
+  $$(".mnav .nb").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(tab === "store") renderStore();
+  if(tab === "analytics") renderAnalytics();
+  if(tab === "earnings") renderEarnings();
+  if(tab === "profile") renderProfile();
+}
+
+/* ============ NOTIFS ============ */
+function pushNotif(text, sub, icon, color){
+  state.notifications.unshift({ id: Date.now()+Math.random(), text, sub, icon, color, time: Date.now(), read: false });
+  if(state.notifications.length > 40) state.notifications.pop();
+  updateBadges(); save();
+}
+function updateBadges(){
+  const un = state.notifications.filter(n => !n.read).length;
+  const nb = $("notifBadge"); if(nb){ nb.textContent = un; nb.dataset.empty = un === 0; }
+}
+function openNotifications(){
+  $("notifBody").innerHTML = state.notifications.map(n => `
+    <div class="notif-item">
+      <div class="ic" style="background:${n.color||'#833ab4'}">${n.icon||'🔔'}</div>
+      <div style="flex:1">
+        <div style="font-size:13.5px;font-weight:600;margin-bottom:3px">${esc(n.text)}</div>
+        ${n.sub ? `<div style="font-size:12px;color:var(--text2);margin-bottom:4px">${esc(n.sub)}</div>` : ''}
+        <div style="font-size:11.5px;color:var(--text3)">${timeAgo(n.time)}</div>
+      </div>
+    </div>`).join("") || `<div class="empty">No notifications</div>`;
+  state.notifications.forEach(n => n.read = true);
+  updateBadges();
+  $("notifModal").classList.add("show");
+}
+
+/* ============ ANALYTICS ============ */
+function renderAnalytics(){
+  const c = $("analyticsContent"); if(!c) return;
+  const a = state.analytics;
+  const totalSold = state.products.reduce((s,p) => s + p.sold, 0);
+  const totalRevenue = state.products.reduce((s,p) => s + p.revenue, 0);
+  const topProducts = [...state.products].sort((x,y) => y.revenue - x.revenue).slice(0,5);
+  c.innerHTML = `
+    <div class="page-title">📊 Analytics</div>
+    <div class="cards">
+      <div class="card"><div class="lbl">🛍️ Products</div><div class="val">${state.products.length}</div></div>
+      <div class="card"><div class="lbl">📦 Items Sold</div><div class="val">${fmt(totalSold)}</div></div>
+      <div class="card"><div class="lbl">💵 Store Revenue</div><div class="val" style="color:var(--green)">${moneyShort(totalRevenue)}</div></div>
+      <div class="card"><div class="lbl">💰 Balance</div><div class="val" style="color:var(--green)">${moneyShort(getBalance())}</div></div>
+    </div>
+    <div class="section"><h3>🏆 Top Selling Products</h3>
+      ${topProducts.length ? topProducts.map(p => `
+        <div class="top-row">
+          <div class="top-thumb" style="background:var(--ig2)">${p.emoji}</div>
+          <div class="top-info"><b>${esc(p.name)}</b><span>📦 ${p.sold} sold · Stock ${p.stock}</span></div>
+          <div class="top-earn">${moneyShort(p.revenue)}</div>
+        </div>`).join("") : `<div class="empty" style="padding:20px">No products yet</div>`}
+    </div>`;
+}
+
+/* ============================================================
+   💰 EARNINGS — LIVE BANNER + TIME RANGES
+   ============================================================ */
+function renderEarnings(){
+  const c = $("earningsContent"); if(!c) return;
+  const balance = getBalance();
+  const storeRevenue = state.products.reduce((s,p) => s + p.revenue, 0);
+  const totalSold = state.products.reduce((s,p) => s + p.sold, 0);
+
+  const saleTx = state.transactions.filter(t => t.type === 'sale');
+  const liveTx = state.transactions.filter(t => t.type === 'live');
+  const restockTx = state.transactions.filter(t => t.type === 'restock');
+  const withdrawTx = state.transactions.filter(t => t.type === 'withdraw');
+
+  /* ----- Live banner (only if live is running) ----- */
+  let liveBanner = "";
+  if(state.live.active){
+    const durSec = Math.floor((Date.now() - state.live.startedAt)/1000);
+    liveBanner = `
+      <div class="live-banner">
+        <div class="live-dot"></div>
+        <div class="live-banner-body">
+          <div class="lb-title"><span class="tag">● LIVE</span> Aap abhi live ho</div>
+          <div class="lb-stats">
+            <div class="stat">⏱️ <span class="lb-timer" id="earnLiveTimer">${formatTimer(durSec)}</span></div>
+            <div class="stat">👁️ <b id="earnLiveViewers">${fmt(state.live.viewers)}</b> viewers</div>
+            <div class="stat">🎁 <b id="earnLiveGifts">${state.live.gifts}</b> gifts</div>
+          </div>
+        </div>
+        <div class="lb-earn">
+          <div class="lbl">Live Earning</div>
+          <div class="amt" id="earnLiveAmt">${moneyShort(state.live.earnings)}</div>
+        </div>
+      </div>`;
+  }
+
+  c.innerHTML = `
+    ${liveBanner}
+    <div class="hero">
+      <button class="withdraw-btn" onclick="openWithdraw()">Withdraw</button>
+      <div class="lbl">💰 Balance (INR)</div>
+      <div class="amt">${money(balance)}</div>
+      <div class="hero-stats">
+        <div class="hero-stat">Store Revenue <b>${moneyShort(storeRevenue)}</b></div>
+        <div class="hero-stat">Items Sold <b>${fmt(totalSold)}</b></div>
+        ${state.live.active ? `<div class="hero-stat">🔴 Live Earning <b>${moneyShort(state.live.earnings)}</b></div>` : ''}
+      </div>
+    </div>
+
+    <div class="tx">
+      <h3>📡 Live Earnings History</h3>
+      ${liveTx.length ? liveTx.slice(0,20).map(tx => {
+        const start = tx.startedAt || tx.time;
+        const end = tx.endedAt || tx.time;
+        const durSec = Math.max(0, Math.floor((end - start)/1000));
+        return `
+          <div class="tx-row">
+            <div class="tx-ic live">📡</div>
+            <div class="tx-info">
+              <b>${esc(tx.desc || 'Live stream')}</b>
+              <div class="tx-meta">
+                <span class="chip-mini time">🕐 ${formatClock(start)} – ${formatClock(end)}</span>
+                <span class="chip-mini dur">⏱️ ${formatDuration(durSec)}</span>
+                <span style="font-size:11px;color:var(--text3)">${timeAgo(tx.time)}</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div class="tx-amt">+${money(tx.amount)}</div>
+              <div class="tx-status ${tx.status}">${tx.status}</div>
+            </div>
+          </div>`;
+      }).join("") : `<div class="empty" style="padding:24px 16px"><div class="icon">📡</div><b>No live earnings yet</b><p>Live jaakar 1000x kamayein</p></div>`}
+    </div>
+
+    <div class="tx">
+      <h3>🛍️ Store Sales History</h3>
+      ${saleTx.length ? saleTx.slice(0,30).map(tx => `
+        <div class="tx-row">
+          <div class="tx-ic sale">🛍️</div>
+          <div class="tx-info">
+            <b>${esc(tx.desc)}</b>
+            <div class="tx-meta"><span style="font-size:11px;color:var(--text3)">${timeAgo(tx.time)}</span></div>
+          </div>
+          <div style="text-align:right"><div class="tx-amt">+${money(tx.amount)}</div><div class="tx-status ${tx.status}">${tx.status}</div></div>
+        </div>`).join("") : `<div class="empty" style="padding:24px 16px"><div class="icon">🛍️</div><b>No sales yet</b><p>Store mein products add karein</p></div>`}
+    </div>
+
+    <div class="tx">
+      <h3>📦 Stock Purchases</h3>
+      ${restockTx.length ? restockTx.slice(0,15).map(tx => `
+        <div class="tx-row">
+          <div class="tx-ic restock">📦</div>
+          <div class="tx-info">
+            <b>${esc(tx.desc)}</b>
+            <div class="tx-meta"><span style="font-size:11px;color:var(--text3)">${timeAgo(tx.time)}</span></div>
+          </div>
+          <div style="text-align:right"><div class="tx-amt out">-${money(tx.amount)}</div></div>
+        </div>`).join("") : `<div class="empty" style="padding:24px 16px"><div class="icon">📦</div><b>No stock purchases yet</b></div>`}
+    </div>
+
+    <div class="tx">
+      <h3>💸 Withdrawals</h3>
+      ${withdrawTx.length ? withdrawTx.slice(0,15).map(tx => `
+        <div class="tx-row">
+          <div class="tx-ic withdraw">📤</div>
+          <div class="tx-info">
+            <b>${esc(tx.desc)}</b>
+            <div class="tx-meta"><span style="font-size:11px;color:var(--text3)">${timeAgo(tx.time)}</span></div>
+          </div>
+          <div style="text-align:right"><div class="tx-amt out">-${money(tx.amount)}</div><div class="tx-status ${tx.status}">${tx.status}</div></div>
+        </div>`).join("") : `<div class="empty" style="padding:24px 16px"><div class="icon">📤</div><b>No withdrawals yet</b></div>`}
+    </div>`;
+}
+
+function addTx({type, amount, desc, icon, status, startedAt, endedAt}){
+  const tx = { id: state.nextTxId++, type, amount, desc, icon, status, time: Date.now() };
+  if(startedAt) tx.startedAt = startedAt;
+  if(endedAt) tx.endedAt = endedAt;
+  state.transactions.unshift(tx);
+  if(state.transactions.length > 300) state.transactions.pop();
+  save();
+}
+
+function openWithdraw(){
+  $("wdBalance").textContent = money(getBalance());
+  $("wdAmount").value = "";
+  $("withdrawModal").classList.add("show");
+}
+function doWithdraw(){
+  const amt = parseFloat($("wdAmount").value);
+  const method = $("wdMethod").value;
+  if(!amt || amt < 500){ toast("⚠️ Min ₹500"); return; }
+  if(amt > getBalance()){ toast(`⚠️ Insufficient balance`); return; }
+  addTx({ type:'withdraw', amount:amt, desc:`Withdrawal to ${method === 'upi' ? 'UPI' : 'Bank'}`, icon:'📤', status:'processing' });
+  save(); closeModal('withdrawModal');
+  toast(`💸 ${money(amt)} processing...`, "money");
+  setTimeout(() => {
+    const tx = state.transactions.find(t => t.type === 'withdraw' && t.status === 'processing');
+    if(tx){ tx.status = 'completed'; save(); }
+    if($("earningsView").classList.contains("show")) renderEarnings();
+    toast(`✅ ${money(amt)} sent!`, "money");
+  }, 8000);
+}
+
+/* ============ PROFILE ============ */
+function renderProfile(){
+  const c = $("profileContent"); if(!c) return;
+  const u = state.user;
+  const totalSold = state.products.reduce((s,p) => s + p.sold, 0);
+  const totalRevenue = state.products.reduce((s,p) => s + p.revenue, 0);
+  const av = u.avatar
+    ? `<img src="${esc(u.avatar)}" onerror="this.parentElement.innerHTML='${esc(u.emoji||'A')}'"/>`
+    : (u.emoji || (u.name||"A").charAt(0));
+
+  c.innerHTML = `
+    <div class="prof-header">
+      <div class="prof-av"><div>${av}</div></div>
+      <div class="prof-info">
+        <div class="row">
+          <div class="uname">@${esc(u.username||'your_instagram')}</div>
+          <button class="btn-edit" onclick="openEditProfile()">Edit Profile</button>
+          <button class="btn-edit" onclick="switchTab('earnings')">💰 ${moneyShort(getBalance())}</button>
+        </div>
+        <div class="prof-stats">
+          <div class="st"><b>${state.products.length}</b> products</div>
+          <div class="st"><b>${fmt(totalSold)}</b> sold</div>
+          <div class="st"><b>${fmt(u.followers||0)}</b> followers</div>
+        </div>
+        <div class="prof-bio">
+          <div class="n">${esc(u.name||'Aap')}</div>
+          <div class="b">${esc(u.bio||'')}</div>
+          <div class="b" style="margin-top:6px;font-size:13px">🛍️ Store Revenue: <b style="color:var(--green)">${moneyShort(totalRevenue)}</b></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-size:15.5px;font-weight:800">My Products</div>
+      <button class="btn btn-green" style="padding:9px 16px;font-size:13px" onclick="openAddProduct()">➕ Add</button>
+    </div>
+    <div class="product-grid" style="padding:0">
+      ${state.products.length ? state.products.slice(0,8).map(p => `
+        <div class="product-card" onclick="switchTab('store')">
+          <div class="product-img">
+            ${p.image ? `<img src="${esc(p.image)}"/>` : p.emoji}
+            <div class="product-stock">${p.stock} left</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name">${esc(p.name)}</div>
+            <div class="product-price-row"><span class="product-price">${money(p.price,0)}</span></div>
+            <div class="product-sold"><span>📦 ${p.sold} sold</span></div>
+          </div>
+        </div>
+      `).join("") : `<div class="empty-store" style="grid-column:1/-1">
+        <div class="icon">🛍️</div>
+        <b>No products yet</b>
+        <p>Apna pehla product add karein!</p>
+        <button class="btn btn-green" onclick="openAddProduct()">➕ Add Product</button>
+      </div>`}
+    </div>`;
+}
+function openEditProfile(){
+  $("epAvatar").value = state.user.avatar || "";
+  $("epName").value = state.user.name || "";
+  $("epUsername").value = state.user.username || "";
+  $("epBio").value = state.user.bio || "";
+  $("editProfileModal").classList.add("show");
+}
+function saveProfile(){
+  const name = $("epName").value.trim() || state.user.name;
+  const username = $("epUsername").value.trim().replace('@','').replace(/\s/g,'_') || state.user.username;
+  const bio = $("epBio").value.trim();
+  const avatar = $("epAvatar").value.trim();
+  state.user.name = name; state.user.username = username;
+  state.user.bio = bio; state.user.avatar = avatar;
+  state.user.emoji = name.charAt(0).toUpperCase();
+  save(); closeModal('editProfileModal');
+  updateUserUI(); renderProfile(); renderStore();
+  toast("✅ Profile updated!");
+}
+function updateUserUI(){
+  const u = state.user;
+  const initial = u.emoji || (u.name||'A').charAt(0).toUpperCase();
+  const av = u.avatar ? `<img src="${esc(u.avatar)}" onerror="this.parentElement.textContent='${initial}'"/>` : initial;
+  const ta = $("topAvatar"); if(ta) ta.innerHTML = `<div>${av}</div>`;
+  const la = $("liveAv"); if(la) la.textContent = initial;
+  const ln = $("liveNm"); if(ln) ln.textContent = u.name;
+  const dot = $("topLiveDot"); if(dot) dot.style.display = state.live.active ? 'block' : 'none';
+}
+
+/* ============ LIVE ============ */
+function startLive(){
+  if(state.live.active) return;
+  state.live = { active:true, viewers:100 + Math.floor(Math.random()*500), startedAt:Date.now(), earnings:0, gifts:0, chat:[{ name:"InstaBook", text:"🔴 Live started! 🔥 1000x earning", ts: Date.now() }] };
+  $("liveOverlay").classList.add("show");
+  renderLiveChat(); updateLiveUI();
+  toast("🔴 You are LIVE! 1000x earning 🔥");
+  pushNotif("🔴 Live Started", "🔥 1000x earning active", "📡", "#ff3355");
+  updateUserUI();
+  startLiveTimer();
+  // If earnings view is open, show the banner immediately
+  if($("earningsView").classList.contains("show")) renderEarnings();
+}
+let liveTimer;
+function startLiveTimer(){
+  if(liveTimer) clearInterval(liveTimer);
+  liveTimer = setInterval(() => {
+    if(!state.live.active){ clearInterval(liveTimer); return; }
+    const dur = Math.floor((Date.now() - state.live.startedAt)/1000);
+    const lt = $("liveTime"); if(lt) lt.textContent = formatTimer(dur);
+
+    // Update earnings banner if visible
+    const et = $("earnLiveTimer"); if(et) et.textContent = formatTimer(dur);
+    const ev = $("earnLiveViewers"); if(ev) ev.textContent = fmt(state.live.viewers);
+    const eg = $("earnLiveGifts"); if(eg) eg.textContent = state.live.gifts;
+    const ea = $("earnLiveAmt"); if(ea) ea.textContent = moneyShort(state.live.earnings);
+  }, 1000);
+}
+function updateLiveUI(){
+  const v = $("liveViewers"); if(v) v.textContent = fmt(state.live.viewers);
+  const e = $("liveEarnings");
+  if(e){ e.textContent = moneyShort(state.live.earnings); e.classList.remove("bump"); void e.offsetWidth; e.classList.add("bump"); }
+}
+function renderLiveChat(){
+  const c = $("liveChat"); if(!c) return;
+  c.innerHTML = state.live.chat.slice(-12).map(m => `<div class="live-msg"><b>${esc(m.name)}</b>${esc(m.text)}</div>`).join("");
+  c.scrollTop = c.scrollHeight;
+}
+function sendLiveComment(){
+  const input = $("liveInput");
+  const text = input.value.trim(); if(!text) return;
+  state.live.chat.push({ name: state.user.name, text, ts: Date.now() });
+  input.value = ""; renderLiveChat();
+}
+function manualGift(){
+  if(!state.live.active) return;
+  state.live.gifts++;
+  state.live.earnings += 10 * LIVE_MULTIPLIER;
+  state.balance += 10 * LIVE_MULTIPLIER;
+  spawnGift(); updateLiveUI();
+  // Refresh earnings banner amount
+  const ea = $("earnLiveAmt"); if(ea) ea.textContent = moneyShort(state.live.earnings);
+  toast(`🎁 Gift! +${money(10*LIVE_MULTIPLIER)}`, "money");
+}
+function spawnGift(){
+  const e = rand(["🎁","💎","👑","🌹","🚀","🏆","💰","🔥"]);
+  const v = $("liveView"); if(!v) return;
+  const g = document.createElement('div');
+  g.className = 'gift'; g.textContent = e;
+  g.style.left = (15 + Math.random()*70) + '%';
+  v.appendChild(g);
+  setTimeout(() => g.remove(), 2300);
+}
+function endLive(){
+  if(!state.live.active) return;
+  const earnings = state.live.earnings;
+  const startedAt = state.live.startedAt;
+  const endedAt = Date.now();
+  const durSec = Math.floor((endedAt - startedAt)/1000);
+  const durMin = Math.floor(durSec/60);
+
+  addTx({
+    type:'live',
+    amount:earnings,
+    desc:`Live stream · ${fmt(state.live.viewers)} viewers · ${state.live.gifts} gifts`,
+    icon:'📡',
+    status:'completed',
+    startedAt,
+    endedAt
+  });
+
+  state.analytics.totalEarnings += earnings;
+  state.live.active = false;
+  if(liveTimer) clearInterval(liveTimer);
+  $("liveOverlay").classList.remove("show");
+  toast(`📴 Live ended — ${money(earnings)} earned in ${formatDuration(durSec)}! 🔥`, "money");
+  pushNotif("📴 Live Ended", `${money(earnings)} kamaye • ${formatDuration(durSec)}`, "💰", "#22c55e");
+  updateUserUI();
+  save();
+  if($("earningsView").classList.contains("show")) renderEarnings();
+}
+
+/* ============ INIT ============ */
+function init(){
+  load();
+  document.documentElement.setAttribute("data-theme", state.theme || 'dark');
+  updateUserUI();
+  switchTab('store');
+  updateBadges();
+  updateSalesTicker();
+  startAutoSeller();
+  setInterval(save, 10000);
+  setInterval(updateSalesTicker, 3000);
+  setInterval(() => {
+    if($("storeView").classList.contains("show")) updateActivityPanel();
+  }, 3000);
+  /* Refresh earnings view periodically so live banner stays fresh even without live overlay */
+  setInterval(() => {
+    if($("earningsView").classList.contains("show")) renderEarnings();
+  }, 5000);
+}
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+</script>
+</body>
+</html>
