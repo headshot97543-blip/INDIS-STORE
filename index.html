@@ -33,7 +33,6 @@ img{max-width:100%;display:block}
 @keyframes popIn{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes moneyPop{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
 @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,51,85,.75)}70%{box-shadow:0 0 0 14px rgba(255,51,85,0)}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(247,151,30,.5)}50%{box-shadow:0 0 40px rgba(247,151,30,.85)}}
 @keyframes giftFall{0%{transform:translateY(-60px) rotate(0) scale(.6);opacity:0}15%{opacity:1;transform:translateY(0) rotate(0) scale(1)}100%{transform:translateY(220px) rotate(45deg) scale(.9);opacity:0}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 @keyframes newBadge{0%{transform:scale(0) rotate(-180deg)}100%{transform:scale(1) rotate(0)}}
@@ -41,11 +40,13 @@ img{max-width:100%;display:block}
 @keyframes countBump{0%{transform:scale(1)}50%{transform:scale(1.12);color:#ffd200}100%{transform:scale(1)}}
 @keyframes slideInRight{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes saleFlash{0%{box-shadow:0 0 0 0 rgba(34,197,94,.8)}50%{box-shadow:0 0 0 12px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+@keyframes lossFlash{0%{box-shadow:0 0 0 0 rgba(255,51,85,.8)}50%{box-shadow:0 0 0 12px rgba(255,51,85,0)}100%{box-shadow:0 0 0 0 rgba(255,51,85,0)}}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes bounceIcon{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.15)}}
 @keyframes soldPop{0%{transform:scale(0) rotate(-180deg);opacity:0}60%{transform:scale(1.3) rotate(10deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes liveBannerPulse{0%,100%{background:linear-gradient(135deg,rgba(255,51,85,.15),rgba(255,51,85,.08));border-color:rgba(255,51,85,.4)}50%{background:linear-gradient(135deg,rgba(255,51,85,.25),rgba(255,51,85,.12));border-color:rgba(255,51,85,.75)}}
 @keyframes dotBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+@keyframes walletLossFlash{0%,100%{color:var(--green)}50%{color:var(--red);transform:scale(1.06)}}
 
 .topbar{position:fixed;top:0;left:0;right:0;height:64px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:14px;z-index:900;backdrop-filter:blur(20px)}
 .logo{font-size:24px;font-weight:900;background:var(--ig2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;letter-spacing:-.8px}
@@ -90,6 +91,7 @@ img{max-width:100%;display:block}
 .hero-stat-box .lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
 .hero-stat-box .val{font-size:18px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;transition:transform .3s}
 .hero-stat-box .val.bump{animation:countBump .5s ease}
+.hero-stat-box .val.loss{color:#ffb3c1}
 
 .store-toolbar{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
 .store-toolbar h2{font-size:17px;font-weight:800;letter-spacing:-.3px;display:flex;align-items:center;gap:10px}
@@ -108,29 +110,40 @@ img{max-width:100%;display:block}
 .product-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .22s, box-shadow .22s, border-color .22s;position:relative;animation:cardPop .3s ease}
 .product-card:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,.6);border-color:var(--hover2)}
 .product-card.selling{animation:saleFlash .9s ease}
+.product-card.losing{animation:lossFlash .9s ease}
 .product-img{aspect-ratio:1;background:var(--ig2);display:grid;place-items:center;font-size:80px;position:relative;overflow:hidden}
 .product-img img{width:100%;height:100%;object-fit:cover}
 .product-badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:8px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;animation:newBadge .4s cubic-bezier(.2,.9,.3,1.3);z-index:2}
 .product-badge.new{background:var(--red);color:#fff}
 .product-badge.sale{background:var(--green);color:#fff}
+.product-badge.loss-badge{background:var(--red);color:#fff}
 .product-stock{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.78);backdrop-filter:blur(10px);color:#fff;padding:4px 9px;border-radius:8px;font-size:10.5px;font-weight:800;z-index:2}
 .product-stock.low{background:rgba(255,51,85,.9)}
 .product-stock.out{background:rgba(80,80,80,.9)}
 .sold-popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:rgba(34,197,94,.95);color:#fff;padding:8px 16px;border-radius:12px;font-size:13px;font-weight:900;z-index:5;pointer-events:none;box-shadow:0 8px 24px rgba(34,197,94,.6);white-space:nowrap}
+.sold-popup.loss{background:rgba(255,51,85,.95);box-shadow:0 8px 24px rgba(255,51,85,.6)}
 .sold-popup.show{animation:soldPop 1.2s ease forwards}
 .product-body{padding:13px}
 .product-name{font-size:13.5px;font-weight:700;margin-bottom:5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px}
 .product-cat{font-size:10.5px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
-.product-price-row{display:flex;align-items:baseline;gap:7px;margin-bottom:6px}
+.product-price-row{display:flex;align-items:baseline;gap:7px;margin-bottom:6px;flex-wrap:wrap}
 .product-price{font-size:18px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+.product-price.loss{color:var(--red)}
 .product-old{font-size:12px;color:var(--text3);text-decoration:line-through}
-.product-sold{font-size:11px;color:var(--text2);font-weight:600;margin-bottom:10px;padding:5px 0;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center}
+.product-cost{font-size:10.5px;color:var(--text3);font-weight:700;background:var(--card2);padding:2px 6px;border-radius:5px}
+.pl-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.pl-badge.profit{background:rgba(34,197,94,.15);color:var(--green)}
+.pl-badge.loss{background:rgba(255,51,85,.15);color:var(--red)}
+.product-sold{font-size:11px;color:var(--text2);font-weight:600;margin-bottom:10px;padding:5px 0;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
 .product-sold b{color:var(--green);font-weight:800}
+.product-sold b.loss{color:var(--red)}
 .product-sold .count{color:var(--text);font-weight:800;font-size:12px}
 .product-actions{display:flex;gap:6px}
 .product-actions button{padding:9px;border-radius:9px;font-size:12px;font-weight:700;transition:all .15s}
 .btn-sell{background:var(--green);color:#fff;flex:1}
 .btn-sell:hover{background:#1ea34d}
+.btn-sell.loss-mode{background:var(--red)}
+.btn-sell.loss-mode:hover{background:#e02040}
 .btn-sell:disabled{background:var(--elevated);color:var(--text3);cursor:not-allowed}
 .btn-icon{background:var(--elevated);color:var(--text2);flex:0 0 auto;padding:9px 11px !important}
 .btn-icon:hover{background:var(--hover2);color:var(--text)}
@@ -149,18 +162,23 @@ img{max-width:100%;display:block}
 .activity-list{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .activity-list::-webkit-scrollbar{display:none}
 .activity-item{flex-shrink:0;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:12.5px;min-width:250px;animation:slideInRight .4s ease}
+.activity-item.loss{border-color:rgba(255,51,85,.4);background:rgba(255,51,85,.06)}
 .activity-item .a-emoji{width:36px;height:36px;border-radius:10px;background:var(--ig2);display:grid;place-items:center;font-size:18px;flex-shrink:0}
 .activity-item .a-info{flex:1;min-width:0}
 .activity-item .a-info b{display:block;font-size:12.5px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .activity-item .a-info span{font-size:11px;color:var(--text2)}
 .activity-item .a-amt{font-size:13px;font-weight:900;color:var(--green);white-space:nowrap}
+.activity-item .a-amt.loss{color:var(--red)}
 
 .wrap{width:100%;max-width:960px;padding:22px 18px;margin:0 auto}
 .page-title{font-size:23px;font-weight:800;margin-bottom:22px;letter-spacing:-.4px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.card.profit-card{border-color:rgba(34,197,94,.35);background:linear-gradient(135deg,rgba(34,197,94,.08),transparent)}
+.card.loss-card{border-color:rgba(255,51,85,.35);background:linear-gradient(135deg,rgba(255,51,85,.08),transparent)}
 .card .lbl{font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
 .card .val{font-size:26px;font-weight:900;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+.card .val.loss{color:var(--red)}
 .section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px}
 .section h3{font-size:15.5px;font-weight:800;margin-bottom:16px}
 .top-row{display:flex;gap:14px;padding:12px 0;align-items:center;border-bottom:1px solid var(--border)}
@@ -170,18 +188,21 @@ img{max-width:100%;display:block}
 .top-info b{font-size:13.5px;display:block;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .top-info span{font-size:11.5px;color:var(--text2)}
 .top-earn{font-size:14px;font-weight:900;color:var(--green);white-space:nowrap}
+.top-earn.loss{color:var(--red)}
 
 .hero{background:var(--ig);border-radius:20px;padding:28px;color:#fff;margin-bottom:22px;position:relative;overflow:hidden;box-shadow:0 16px 50px rgba(131,58,180,.4)}
+.hero.negative{background:linear-gradient(135deg,#ff3355,#833ab4);box-shadow:0 16px 50px rgba(255,51,85,.4)}
 .hero::before{content:"💰";position:absolute;top:-30px;right:-15px;font-size:150px;opacity:.14}
 .hero .lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;opacity:.92}
-.hero .amt{font-size:46px;font-weight:900;letter-spacing:-2px;margin:8px 0 18px;position:relative;z-index:1;font-variant-numeric:tabular-nums}
+.hero .amt{font-size:46px;font-weight:900;letter-spacing:-2px;margin:8px 0 18px;position:relative;z-index:1;font-variant-numeric:tabular-nums;transition:color .3s}
+.hero .amt.loss-flash{animation:walletLossFlash .9s ease}
 .hero-stats{display:flex;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
 .hero-stat{background:rgba(255,255,255,.22);backdrop-filter:blur(10px);border-radius:12px;padding:10px 16px;font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,.15)}
 .hero-stat b{display:block;font-size:15px;font-weight:900;margin-top:3px}
+.hero-stat.loss b{color:#ffb3c1}
 .withdraw-btn{position:absolute;top:22px;right:22px;background:#fff;color:#000;padding:11px 22px;border-radius:26px;font-weight:800;font-size:13px;z-index:2;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .withdraw-btn:hover{transform:scale(1.05)}
 
-/* ============ LIVE NOW BANNER (Earnings) ============ */
 .live-banner{
   background:linear-gradient(135deg,rgba(255,51,85,.15),rgba(255,51,85,.05));
   border:1.5px solid rgba(255,51,85,.4);
@@ -195,53 +216,16 @@ img{max-width:100%;display:block}
   position:relative;
   overflow:hidden;
 }
-.live-banner::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,51,85,.15),transparent);
-  transform:translateX(-100%);
-  animation:slideInRight 2.5s linear infinite;
-}
-.live-dot{
-  width:14px;height:14px;border-radius:50%;background:var(--red);
-  box-shadow:0 0 0 0 rgba(255,51,85,.8);
-  animation:livePulse 1.6s infinite, dotBlink 1.2s infinite;
-  flex-shrink:0;
-  position:relative;
-  z-index:1;
-}
+.live-banner::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,51,85,.15),transparent);transform:translateX(-100%);animation:slideInRight 2.5s linear infinite;}
+.live-dot{width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(255,51,85,.8);animation:livePulse 1.6s infinite, dotBlink 1.2s infinite;flex-shrink:0;position:relative;z-index:1;}
 .live-banner-body{flex:1;min-width:0;position:relative;z-index:1}
-.live-banner-body .lb-title{
-  font-size:12px;font-weight:800;color:var(--red);
-  text-transform:uppercase;letter-spacing:1px;
-  display:flex;align-items:center;gap:8px;margin-bottom:5px;
-}
-.live-banner-body .lb-title .tag{
-  background:var(--red);color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;
-}
-.live-banner-body .lb-stats{
-  display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--text2);font-weight:600;
-}
+.live-banner-body .lb-title{font-size:12px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.live-banner-body .lb-title .tag{background:var(--red);color:#fff;padding:2px 8px;border-radius:6px;font-size:10px;}
+.live-banner-body .lb-stats{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--text2);font-weight:600;}
 .live-banner-body .lb-stats .stat{display:flex;align-items:center;gap:5px}
-.live-banner-body .lb-stats .stat b{
-  font-size:14px;font-weight:900;color:var(--text);
-  font-variant-numeric:tabular-nums;letter-spacing:-.3px;
-}
-.live-banner-body .lb-timer{
-  font-family:'SF Mono','Consolas',monospace;
-  font-variant-numeric:tabular-nums;
-  background:rgba(255,51,85,.25);
-  color:#fff;
-  padding:3px 10px;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:800;
-  letter-spacing:.5px;
-}
-.live-banner .lb-earn{
-  text-align:right;flex-shrink:0;position:relative;z-index:1;
-}
+.live-banner-body .lb-stats .stat b{font-size:14px;font-weight:900;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:-.3px;}
+.live-banner-body .lb-timer{font-family:'SF Mono','Consolas',monospace;font-variant-numeric:tabular-nums;background:rgba(255,51,85,.25);color:#fff;padding:3px 10px;border-radius:8px;font-size:14px;font-weight:800;letter-spacing:.5px;}
+.live-banner .lb-earn{text-align:right;flex-shrink:0;position:relative;z-index:1;}
 .live-banner .lb-earn .lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .live-banner .lb-earn .amt{font-size:22px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;letter-spacing:-.5px;margin-top:2px}
 
@@ -249,8 +233,10 @@ img{max-width:100%;display:block}
 .tx h3{font-size:15.5px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .tx-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);align-items:center}
 .tx-row:last-child{border-bottom:none}
+.tx-row.loss-row{background:rgba(255,51,85,.05);border-radius:8px;padding:14px 10px;margin:0 -10px}
 .tx-ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:21px;flex-shrink:0;position:relative}
 .tx-ic.sale{background:linear-gradient(135deg,#22c55e,#00c9a7);color:#fff}
+.tx-ic.loss{background:linear-gradient(135deg,#ff3355,#cc0033);color:#fff}
 .tx-ic.live{background:linear-gradient(135deg,#fd1d1d,#fcb045);color:#fff}
 .tx-ic.live.active{animation:livePulse 1.6s infinite}
 .tx-ic.restock{background:var(--elevated);color:var(--text2)}
@@ -258,27 +244,14 @@ img{max-width:100%;display:block}
 .tx-info{flex:1;min-width:0}
 .tx-info b{font-size:13.5px;display:block;margin-bottom:4px}
 .tx-info .tx-meta{font-size:11.5px;color:var(--text2);display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:3px}
-.tx-info .tx-meta .chip-mini{
-  background:var(--card2);
-  padding:2px 8px;
-  border-radius:6px;
-  font-size:10.5px;
-  font-weight:700;
-  color:var(--text2);
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-}
-.tx-info .tx-meta .chip-mini.time{
-  background:rgba(255,51,85,.15);
-  color:var(--red);
-}
-.tx-info .tx-meta .chip-mini.dur{
-  background:rgba(62,166,255,.15);
-  color:var(--blue);
-}
+.tx-info .tx-meta .chip-mini{background:var(--card2);padding:2px 8px;border-radius:6px;font-size:10.5px;font-weight:700;color:var(--text2);display:inline-flex;align-items:center;gap:4px;}
+.tx-info .tx-meta .chip-mini.time{background:rgba(255,51,85,.15);color:var(--red);}
+.tx-info .tx-meta .chip-mini.dur{background:rgba(62,166,255,.15);color:var(--blue);}
+.tx-info .tx-meta .chip-mini.profit{background:rgba(34,197,94,.15);color:var(--green);}
+.tx-info .tx-meta .chip-mini.loss{background:rgba(255,51,85,.15);color:var(--red);}
 .tx-amt{font-size:15px;font-weight:900;color:var(--green);white-space:nowrap}
 .tx-amt.out{color:var(--text2)}
+.tx-amt.loss{color:var(--red)}
 .tx-status{padding:3px 9px;border-radius:8px;font-size:10px;font-weight:800;text-transform:uppercase;margin:4px 0 0;display:inline-block}
 .tx-status.processing{background:rgba(247,151,30,.16);color:#f7971e}
 .tx-status.completed{background:rgba(34,197,94,.16);color:var(--green)}
@@ -347,6 +320,7 @@ img{max-width:100%;display:block}
 .btn-primary{background:var(--blue);color:#0f0f0f}
 .btn-secondary{background:var(--elevated);color:var(--text)}
 .btn-green{background:var(--green);color:#fff}
+.btn-red{background:var(--red);color:#fff}
 
 .emoji-picker{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:16px}
 .emoji-pick{aspect-ratio:1;border-radius:9px;background:var(--card2);border:2px solid transparent;display:grid;place-items:center;font-size:22px;cursor:pointer;transition:all .15s}
@@ -359,10 +333,15 @@ img{max-width:100%;display:block}
 .price-preview .pp-row b{font-weight:800;color:var(--green)}
 .price-preview .pp-row b.neg{color:var(--red)}
 
+.warning-box{background:rgba(255,51,85,.1);border:1px solid rgba(255,51,85,.35);border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--text);line-height:1.5;display:none}
+.warning-box.show{display:block}
+.warning-box b{color:var(--red)}
+
 .toast{position:fixed;bottom:86px;left:50%;transform:translate(-50%,140px);background:var(--text);color:var(--bg);padding:14px 24px;border-radius:28px;font-size:14.5px;font-weight:700;z-index:9999;box-shadow:var(--shadow);opacity:0;transition:all .4s cubic-bezier(.2,.9,.3,1.3);pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{transform:translate(-50%,0);opacity:1}
 .toast.money{background:var(--gold);color:#0f0f0f;animation:moneyPop .5s ease}
 .toast.sale{background:var(--green);color:#fff;animation:moneyPop .5s ease}
+.toast.loss{background:var(--red);color:#fff;animation:moneyPop .5s ease}
 
 .notif-item{display:flex;gap:13px;padding:13px;border-radius:11px;cursor:pointer;align-items:flex-start;transition:background .15s}
 .notif-item:hover{background:var(--hover)}
@@ -376,7 +355,6 @@ img{max-width:100%;display:block}
 .mnav .nb.active{color:var(--text)}
 .mnav .nb.active svg{stroke-width:2.4}
 
-/* ============ ⚡ AUTO CLICKER ============ */
 .ac-status{display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;transition:all .25s}
 .ac-status .dot{width:12px;height:12px;border-radius:50%;background:var(--text3);flex-shrink:0}
 .ac-status.on{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.08)}
@@ -388,6 +366,7 @@ img{max-width:100%;display:block}
 .ac-stat{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:10px 8px;text-align:center}
 .ac-stat .lbl{font-size:9.5px;color:var(--text2);font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .ac-stat .val{font-size:15px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+.ac-stat .val.loss{color:var(--red)}
 input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:var(--elevated);outline:none;margin:4px 0 16px}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#f7971e,#ffd200);cursor:pointer;box-shadow:0 2px 10px rgba(247,151,30,.7);border:2px solid #0f0f0f}
 input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0f0f;border-radius:50%;background:linear-gradient(135deg,#f7971e,#ffd200);cursor:pointer}
@@ -395,6 +374,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
 .ac-float.show{display:flex}
 .ac-float .stop{background:#0f0f0f;color:#ffd200;padding:7px 12px;border-radius:10px;font-size:11px;font-weight:900;letter-spacing:.5px}
 .ac-float .stop:hover{background:#222}
+
 @media (min-width:901px){ .ac-float{bottom:22px} }
 
 @media (max-width:900px){
@@ -472,12 +452,12 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
 
       <div class="store-hero">
         <h1>🛍️ My Clothing Store</h1>
-        <p>Product add karein — sales automatically hoti rahengi. Har sale par aapko paisa milega!</p>
+        <p>Real store ki tarah — profit bhi, loss bhi. Sell price cost se kam rakha to loss wallet me dikhega!</p>
         <div class="hero-stats-row">
           <div class="hero-stat-box"><div class="lbl">Products</div><div class="val" id="statProducts">0</div></div>
           <div class="hero-stat-box"><div class="lbl">In Stock</div><div class="val" id="statStock">0</div></div>
           <div class="hero-stat-box"><div class="lbl">Sold</div><div class="val" id="statSold">0</div></div>
-          <div class="hero-stat-box"><div class="lbl">Revenue</div><div class="val" id="statRevenue">₹0</div></div>
+          <div class="hero-stat-box"><div class="lbl">Net P&L</div><div class="val" id="statPL">₹0</div></div>
         </div>
       </div>
 
@@ -520,7 +500,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
   <button class="nb" data-tab="profile" onclick="switchTab('profile')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
 </nav>
 
-<!-- LIVE OVERLAY -->
 <div class="live-ov" id="liveOverlay">
   <div class="live-view" id="liveView">
     <div class="live-blob b1"></div><div class="live-blob b2"></div><div class="live-blob b3"></div>
@@ -571,23 +550,26 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
           <input id="pPrice" type="number" class="finp" placeholder="999" min="1" oninput="updatePricePreview()"/>
         </div>
         <div>
-          <label class="flbl">MRP (₹)</label>
-          <input id="pOldPrice" type="number" class="finp" placeholder="1499" min="0" oninput="updatePricePreview()"/>
+          <label class="flbl">Cost Price (₹) *</label>
+          <input id="pCost" type="number" class="finp" placeholder="500" min="0" oninput="updatePricePreview()"/>
         </div>
       </div>
       <div class="frow">
         <div>
-          <label class="flbl">Cost Price (₹)</label>
-          <input id="pCost" type="number" class="finp" placeholder="500" min="0" oninput="updatePricePreview()"/>
+          <label class="flbl">MRP (₹)</label>
+          <input id="pOldPrice" type="number" class="finp" placeholder="1499" min="0" oninput="updatePricePreview()"/>
         </div>
         <div>
           <label class="flbl">Stock Quantity *</label>
           <input id="pStock" type="number" class="finp" placeholder="10" min="1" oninput="updatePricePreview()"/>
         </div>
       </div>
+      <div class="warning-box" id="lossWarning">
+        ⚠️ <b>Loss Warning:</b> Selling price cost se kam hai — har sale par <b id="lossAmt">₹0</b> ka loss hoga!
+      </div>
       <div class="price-preview" id="pricePreview">
         <div class="pp-row"><span>💰 Profit / unit</span><b id="ppProfit">₹0</b></div>
-        <div class="pp-row"><span>📦 Total stock value</span><b id="ppStock">₹0</b></div>
+        <div class="pp-row"><span>📦 Total cost value</span><b id="ppStock">₹0</b></div>
         <div class="pp-row"><span>💵 Potential revenue</span><b id="ppRevenue">₹0</b></div>
         <div class="pp-row"><span>📊 Margin</span><b id="ppMargin">0%</b></div>
       </div>
@@ -648,12 +630,14 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
         <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('restockQty').value=25">+25</button>
         <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="$('restockQty').value=50">+50</button>
       </div>
+      <div style="background:var(--card2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.5">
+        📦 Restock par cost price × quantity aapke wallet se katega (real store jaisa).
+      </div>
     </div>
     <div class="mfoot"><button class="btn btn-secondary" onclick="closeModal('restockModal')">Cancel</button><button class="btn btn-green" onclick="doRestock()">Restock</button></div>
   </div>
 </div>
 
-<!-- ⚡ AUTO CLICKER MODAL -->
 <div class="mb" id="autoClickerModal">
   <div class="mbox">
     <div class="mhead"><h2>⚡ Auto Clicker</h2><button class="mclose" onclick="closeModal('autoClickerModal')">✕</button></div>
@@ -664,7 +648,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
       </div>
       <div class="ac-stat-grid">
         <div class="ac-stat"><div class="lbl">Clicks</div><div class="val" id="acClicks">0</div></div>
-        <div class="ac-stat"><div class="lbl">Earned</div><div class="val" id="acEarned">₹0</div></div>
+        <div class="ac-stat"><div class="lbl">Net P&L</div><div class="val" id="acEarned">₹0</div></div>
         <div class="ac-stat"><div class="lbl">Running</div><div class="val" id="acTime">00:00</div></div>
       </div>
       <label class="flbl">🎯 Target Product</label>
@@ -680,7 +664,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
         <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(100);$('acSpeed').value=100">🔥 100/s</button>
       </div>
       <div style="background:var(--card2);border-radius:11px;padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.6">
-        💡 Auto Clicker khud se <b style="color:var(--text)">Sell Now</b> button ko fast click karta rahega. Stock khatam hone par apne aap band ho jayega.
+        💡 Auto Clicker khud se <b style="color:var(--text)">Sell Now</b> button ko fast click karta rahega. Loss wale products par bhi kaam karega — P&L real time mein update hoga.
       </div>
     </div>
     <div class="mfoot">
@@ -690,7 +674,6 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
   </div>
 </div>
 
-<!-- ⚡ AUTO CLICKER FLOATING PILL -->
 <div class="ac-float" id="acFloat">
   <span style="font-size:18px">⚡</span>
   <div style="line-height:1.15">
@@ -704,7 +687,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
 
 <script>
 /* ============================================================
-   INSTABOOK v6 — Auto-selling store + Live + ⚡ AUTO CLICKER
+   INSTABOOK v7 — REAL STORE (Profit/Loss) + Auto Clicker + Live
    ============================================================ */
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
@@ -721,14 +704,19 @@ const fmt = n => {
   if(n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,"")+"K";
   return String(n);
 };
-const money = (n, d=2) => "₹" + Number(n||0).toLocaleString("en-IN", {minimumFractionDigits:d, maximumFractionDigits:d});
+const money = (n, d=2) => {
+  const neg = n < 0;
+  const v = Math.abs(Number(n)||0).toLocaleString("en-IN", {minimumFractionDigits:d, maximumFractionDigits:d});
+  return (neg ? "-₹" : "₹") + v;
+};
 const moneyShort = n => {
-  n = Math.max(0, Number(n)||0);
+  const neg = n < 0;
+  n = Math.abs(Number(n)||0);
   if(n === 0) return "₹0";
-  if(n >= 1e7) return "₹" + (n/1e7).toFixed(2).replace(/\.00$/,"") + "Cr";
-  if(n >= 1e5) return "₹" + (n/1e5).toFixed(1).replace(/\.0$/,"") + "L";
-  if(n >= 1e3) return "₹" + (n/1e3).toFixed(1).replace(/\.0$/,"") + "K";
-  return "₹" + n.toFixed(2);
+  if(n >= 1e7) return (neg?"-₹":"₹") + (n/1e7).toFixed(2).replace(/\.00$/,"") + "Cr";
+  if(n >= 1e5) return (neg?"-₹":"₹") + (n/1e5).toFixed(1).replace(/\.0$/,"") + "L";
+  if(n >= 1e3) return (neg?"-₹":"₹") + (n/1e3).toFixed(1).replace(/\.0$/,"") + "K";
+  return (neg?"-₹":"₹") + n.toFixed(2);
 };
 const timeAgo = ts => {
   const d = Math.floor((Date.now()-ts)/1000);
@@ -765,18 +753,12 @@ function toast(msg, cls){
 }
 function closeModal(id){ $(id).classList.remove("show"); }
 
-const GRADS = [
-  "linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)","linear-gradient(135deg,#405de6,#833ab4)",
-  "linear-gradient(135deg,#e1306c,#fcb045)","linear-gradient(135deg,#00c9a7,#00b4d8)",
-  "linear-gradient(135deg,#fd1d1d,#fcb045)","linear-gradient(135deg,#833ab4,#405de6)",
-  "linear-gradient(135deg,#f7971e,#ffd200)","linear-gradient(135deg,#00b4d8,#0077b6)"
-];
 const PRODUCT_EMOJIS = ["👕","👚","👖","🧥","👗","🥻","👘","👟","👜","👠","🧣","🧢","🕶️","💍","👒","🩳","🧦","👔","🎽","👞"];
 const FANS = ["Rahul","Priya","Amit","Sneha","Vikram","Kavya","Arjun","Rohit","Anjali","Karan","Pooja","Nikhil","Tina","Sameer","Neha","Manish","Divya","Raj","Simran","Aryan","Ishita","Aditya","Meera","Varun","Sakshi","Rohan","Deepika","Ankit","Riya","Yash","Aditi","Kabir","Sonal","Harsh","Isha","Siddharth","Tanvi","Vivek","Nisha","Akash"];
 const CITIES = ["Mumbai","Delhi","Bangalore","Pune","Hyderabad","Chennai","Kolkata","Jaipur","Ahmedabad","Lucknow","Chandigarh","Indore","Surat","Kochi","Goa","Manali"];
 const CAT_EMOJI = { shirt:"👕", tshirt:"👚", jeans:"👖", jacket:"🧥", dress:"👗", saree:"🥻", kurta:"👘", shoes:"👟", accessory:"👜" };
 
-const STORE = "instabook-store-v6";
+const STORE = "instabook-store-v7";
 const state = {
   theme: "dark",
   user: { name:"Aap", username:"your_instagram", bio:"Clothing brand owner 🛍️", avatar:"", emoji:"A", followers:0, following:0 },
@@ -792,10 +774,12 @@ const state = {
   pendingRestockId: null,
   newEmoji: "👕",
   recentSales: [],
-  /* ✅ PERSISTENT TOTALS — inhe product delete karne se kuch nahi hota */
+  /* persistent totals */
   storeRevenue: 0,
   totalItemsSold: 0,
-  /* ⚡ AUTO CLICKER state */
+  totalProfit: 0,
+  totalLoss: 0,
+  /* auto clicker */
   autoClicker: { on:false, cps:20, targetId:null, clicks:0, earned:0, startedAt:null }
 };
 
@@ -811,6 +795,8 @@ function save(){
       recentSales: state.recentSales.slice(0,20),
       storeRevenue: state.storeRevenue,
       totalItemsSold: state.totalItemsSold,
+      totalProfit: state.totalProfit,
+      totalLoss: state.totalLoss,
       autoClicker: state.autoClicker
     }));
   }catch(e){}
@@ -825,7 +811,6 @@ function load(){
   if(!state.nextProductId) state.nextProductId = 1;
   if(!state.recentSales) state.recentSales = [];
 
-  /* ✅ MIGRATION: purane save se persistent totals nikalo */
   if(typeof state.storeRevenue !== "number"){
     const txRev = state.transactions.filter(t => t.type === "sale").reduce((s,t) => s + (t.amount||0), 0);
     const prRev = state.products.reduce((s,p) => s + (p.revenue||0), 0);
@@ -834,7 +819,16 @@ function load(){
   if(typeof state.totalItemsSold !== "number"){
     state.totalItemsSold = state.products.reduce((s,p) => s + (p.sold||0), 0);
   }
-  /* ⚡ Auto clicker kabhi auto-resume na ho */
+  if(typeof state.totalProfit !== "number") state.totalProfit = 0;
+  if(typeof state.totalLoss !== "number") state.totalLoss = 0;
+
+  /* Migrate old products — add totalPL field */
+  state.products.forEach(p => {
+    if(typeof p.totalPL !== "number"){
+      p.totalPL = (p.revenue||0) - ((p.cost||0) * (p.sold||0));
+    }
+  });
+
   if(!state.autoClicker) state.autoClicker = { on:false, cps:20, targetId:null, clicks:0, earned:0, startedAt:null };
   state.autoClicker.on = false;
 }
@@ -842,6 +836,9 @@ function load(){
 function getBalance(){
   const withdrawn = state.transactions.filter(t => t.type === 'withdraw' && t.status !== 'rejected').reduce((s,t) => s + t.amount, 0);
   return Math.max(0, state.balance - withdrawn);
+}
+function getNetPL(){
+  return (state.totalProfit || 0) - (state.totalLoss || 0);
 }
 
 /* ============ AUTO-SELLER ============ */
@@ -871,63 +868,93 @@ function startAutoSeller(){
   }, 1200);
 }
 
-/* ⬇️ performSale — persistent totals ke saath */
+/* ⬇️ REAL STORE SALE — Profit/Loss logic */
 function performSale(p, qty, opts){
   opts = opts || {};
   const sellQty = Math.min(qty, p.stock);
   if(sellQty <= 0) return;
-  const revenue = p.price * sellQty;
-  const profit = (p.price - (p.cost||0)) * sellQty;
+
+  const revenue = p.price * sellQty;                 /* cash in */
+  const costTotal = (p.cost||0) * sellQty;           /* cost of goods */
+  const pl = revenue - costTotal;                    /* profit > 0, loss < 0 */
+  const isLoss = pl < 0;
+  const unitPL = p.price - (p.cost||0);
+
+  /* Update product */
   p.stock -= sellQty;
   p.sold += sellQty;
   p.revenue += revenue;
+  p.totalPL = (p.totalPL || 0) + pl;
+
+  /* Wallet: revenue comes in (cost already deducted at restock) */
   state.balance += revenue;
   state.analytics.totalEarnings += revenue;
-
-  /* ✅ PERSISTENT TOTALS — product delete karne par bhi MINUS nahi honge */
-  state.storeRevenue   = (state.storeRevenue   || 0) + revenue;
+  state.storeRevenue = (state.storeRevenue || 0) + revenue;
   state.totalItemsSold = (state.totalItemsSold || 0) + sellQty;
+
+  /* Track P&L globally */
+  if(isLoss){
+    state.totalLoss = (state.totalLoss || 0) + Math.abs(pl);
+  } else {
+    state.totalProfit = (state.totalProfit || 0) + pl;
+  }
 
   const buyer = rand(FANS);
   const city = rand(CITIES);
 
+  const plLabel = isLoss
+    ? `📉 Loss ${money(Math.abs(pl),0)}`
+    : `📈 Profit ${money(pl,0)}`;
+
+  /* Transaction — loss type for red styling */
   addTx({
-    type: 'sale', amount: revenue,
-    desc: `${buyer} (${city}) bought ${p.name} × ${sellQty} · Profit ${money(profit)}`,
-    icon: '🛍️', status: 'completed'
+    type: isLoss ? 'loss' : 'sale',
+    amount: revenue,
+    pl: pl,
+    desc: `${buyer} (${city}) bought ${p.name} × ${sellQty} · ${plLabel}`,
+    icon: isLoss ? '📉' : '🛍️',
+    status: 'completed'
   });
 
+  /* Recent sale */
   state.recentSales.unshift({
     buyer, city, productName: p.name, emoji: p.emoji,
-    qty: sellQty, amount: revenue, time: Date.now()
+    qty: sellQty, amount: revenue, pl, isLoss,
+    time: Date.now()
   });
   if(state.recentSales.length > 20) state.recentSales.pop();
 
-  flashProductSold(p.id, sellQty, revenue);
+  flashProductSold(p.id, sellQty, pl, isLoss);
 
   if(!opts.silent){
-    if(Math.random() < 0.35){
-      pushNotif(`🛍️ ${buyer} ne order kiya!`, `${p.name} × ${sellQty} — ${money(revenue)} · ${city}`, "🛍️", "#22c55e");
-    }
-    if(Math.random() < 0.35){
-      toast(`💸 ${buyer} ne kharida ${p.name} × ${sellQty} — +${money(revenue)}`, "sale");
+    if(isLoss){
+      toast(`📉 LOSS! ${buyer} ne ${p.name} × ${sellQty} — Loss ${money(Math.abs(pl),0)} wallet me dikh gaya`, "loss");
+      pushNotif(`📉 Loss Sale!`, `${p.name} × ${sellQty} — Loss ${money(Math.abs(pl),0)} · ${city}`, "📉", "#ff3355");
+    } else {
+      if(Math.random() < 0.4){
+        toast(`💸 ${buyer} ne kharida ${p.name} × ${sellQty} — Profit +${money(pl,0)}`, "sale");
+      }
+      if(Math.random() < 0.3){
+        pushNotif(`🛍️ ${buyer} ne order kiya!`, `${p.name} × ${sellQty} — Profit ${money(pl,0)} · ${city}`, "🛍️", "#22c55e");
+      }
     }
   }
 }
 
-/* ⬇️ Flash throttle — auto clicker par DOM flood na ho */
 let lastFlashTime = 0;
-function flashProductSold(productId, qty, amount){
+function flashProductSold(productId, qty, pl, isLoss){
   const now = Date.now();
   if(now - lastFlashTime < 120) return;
   lastFlashTime = now;
   const card = document.querySelector(`.product-card[data-pid="${productId}"]`);
   if(!card) return;
-  card.classList.add("selling");
-  setTimeout(() => card.classList.remove("selling"), 900);
+  card.classList.add(isLoss ? "losing" : "selling");
+  setTimeout(() => card.classList.remove(isLoss ? "losing" : "selling"), 900);
   const pop = document.createElement('div');
-  pop.className = 'sold-popup';
-  pop.textContent = `+${money(amount,0)} 🎉`;
+  pop.className = 'sold-popup' + (isLoss ? ' loss' : '');
+  pop.textContent = isLoss
+    ? `📉 ${money(Math.abs(pl),0)}`
+    : `+${money(pl,0)} 🎉`;
   card.appendChild(pop);
   setTimeout(() => pop.classList.add("show"), 10);
   setTimeout(() => pop.remove(), 1500);
@@ -944,8 +971,8 @@ function renderStore(){
     grid.innerHTML = `<div class="empty-store">
       <div class="icon">🛍️</div>
       <b>${filter === "all" ? "Store abhi khali hai!" : "Is category mein koi product nahi"}</b>
-      <p>Apna pehla clothing product add karein. Aap khud naam, price, stock set karein.</p>
-      <div class="hint">💡 <b>Jaise hi aap product add karoge, wo apne aap bikna shuru ho jayega.</b> Har sale par paisa aapke balance mein add hoga.</div>
+      <p>Apna pehla clothing product add karein. Profit ke liye selling price cost se zyada rakhein!</p>
+      <div class="hint">💡 <b>Real store logic:</b> Sell price > Cost = Profit 📈 · Sell price < Cost = Loss 📉 (wallet me dikhega)</div>
       <button class="btn btn-green" style="padding:13px 26px;font-size:15px" onclick="openAddProduct()">➕ Add Your First Product</button>
     </div>`;
     return;
@@ -955,8 +982,21 @@ function renderStore(){
     const stockTxt = p.stock <= 0 ? '❌ Out' : `${p.stock} left`;
     const discount = (p.oldPrice && p.oldPrice > p.price) ? Math.round(((p.oldPrice - p.price)/p.oldPrice)*100) : 0;
     const isNew = (Date.now() - p.time) < 24*3600000;
-    const badge = isNew ? `<div class="product-badge new">NEW</div>` :
-                 (discount > 0 ? `<div class="product-badge sale">-${discount}%</div>` : '');
+    const unitPL = p.price - (p.cost||0);
+    const isLossProduct = unitPL < 0;
+    const prodPL = p.totalPL || 0;
+
+    let badge = '';
+    if(isLossProduct) badge = `<div class="product-badge loss-badge">📉 LOSS</div>`;
+    else if(isNew) badge = `<div class="product-badge new">NEW</div>`;
+    else if(discount > 0) badge = `<div class="product-badge sale">-${discount}%</div>`;
+
+    const plBadge = unitPL >= 0
+      ? `<span class="pl-badge profit">📈 +${money(unitPL,0)}/unit</span>`
+      : `<span class="pl-badge loss">📉 ${money(unitPL,0)}/unit</span>`;
+
+    const plColor = prodPL >= 0 ? '' : ' loss';
+
     return `
       <div class="product-card" data-pid="${p.id}">
         <div class="product-img">
@@ -966,17 +1006,18 @@ function renderStore(){
         </div>
         <div class="product-body">
           <div class="product-name">${esc(p.name)}</div>
-          <div class="product-cat">${CAT_EMOJI[p.cat]||''} ${esc(p.cat)}</div>
+          <div class="product-cat">${CAT_EMOJI[p.cat]||''} ${esc(p.cat)} · Cost ${money(p.cost||0,0)}</div>
           <div class="product-price-row">
-            <span class="product-price">${money(p.price,0)}</span>
+            <span class="product-price${isLossProduct?' loss':''}">${money(p.price,0)}</span>
             ${p.oldPrice && p.oldPrice > p.price ? `<span class="product-old">${money(p.oldPrice,0)}</span>` : ''}
+            ${plBadge}
           </div>
           <div class="product-sold">
             <span>📦 <span class="count">${p.sold}</span> sold</span>
-            <span>💰 <b>${moneyShort(p.revenue)}</b></span>
+            <span>💰 <b class="${plColor.trim()}">${moneyShort(prodPL)}</b></span>
           </div>
           <div class="product-actions">
-            <button class="btn-sell" ${p.stock <= 0 ? 'disabled' : ''} onclick="quickSell(${p.id})">${p.stock <= 0 ? 'Out of Stock' : '💸 Sell Now'}</button>
+            <button class="btn-sell${isLossProduct?' loss-mode':''}" ${p.stock <= 0 ? 'disabled' : ''} onclick="quickSell(${p.id})">${p.stock <= 0 ? 'Out of Stock' : (isLossProduct ? '📉 Sell (Loss)' : '💸 Sell Now')}</button>
             <button class="btn-icon" onclick="openRestock(${p.id})" title="Restock">➕</button>
             <button class="btn-icon danger" onclick="deleteProduct(${p.id})" title="Delete">🗑️</button>
           </div>
@@ -985,16 +1026,23 @@ function renderStore(){
   }).join("");
 }
 
-/* ✅ ab Sold/Revenue persistent hain — product delete se ghatenge nahi */
 function updateStoreStats(){
   const totalProducts = state.products.length;
   const totalStock = state.products.reduce((s,p)=>s+p.stock,0);
   const totalSold = state.totalItemsSold || 0;
-  const totalRevenue = state.storeRevenue || 0;
+  const netPL = getNetPL();
   setStat("statProducts", totalProducts, false);
   setStat("statStock", totalStock, false);
   setStat("statSold", totalSold, true);
-  setStat("statRevenue", moneyShort(totalRevenue), true);
+  const plEl = $("statPL");
+  if(plEl){
+    const val = moneyShort(netPL);
+    if(plEl.textContent !== val){
+      plEl.textContent = val;
+      plEl.classList.toggle("loss", netPL < 0);
+      plEl.classList.remove("bump"); void plEl.offsetWidth; plEl.classList.add("bump");
+    }
+  }
 }
 function setStat(id, val, bump){
   const el = $(id); if(!el) return;
@@ -1009,16 +1057,20 @@ function updateActivityPanel(){
   const list = $("activityList"); if(!list) return;
   if(!state.recentSales.length){ panel.style.display = "none"; return; }
   panel.style.display = "block";
-  list.innerHTML = state.recentSales.slice(0, 10).map(s => `
-    <div class="activity-item">
-      <div class="a-emoji">${s.emoji}</div>
-      <div class="a-info">
-        <b>${esc(s.productName)} × ${s.qty}</b>
-        <span>${esc(s.buyer)} · ${esc(s.city)} · ${timeAgo(s.time)}</span>
+  list.innerHTML = state.recentSales.slice(0, 10).map(s => {
+    const isLoss = s.isLoss || (s.pl !== undefined && s.pl < 0);
+    const pl = s.pl !== undefined ? s.pl : 0;
+    return `
+      <div class="activity-item${isLoss?' loss':''}">
+        <div class="a-emoji">${s.emoji}</div>
+        <div class="a-info">
+          <b>${esc(s.productName)} × ${s.qty}</b>
+          <span>${esc(s.buyer)} · ${esc(s.city)} · ${timeAgo(s.time)}</span>
+        </div>
+        <div class="a-amt${isLoss?' loss':''}">${isLoss?'📉 ':''}${moneyShort(pl)}</div>
       </div>
-      <div class="a-amt">+${money(s.amount,0)}</div>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 }
 
 function updateSalesTicker(){
@@ -1029,9 +1081,11 @@ function updateSalesTicker(){
     return;
   }
   const doubled = [...items, ...items];
-  track.innerHTML = doubled.map(s => `
-    <span class="tick-item">🎉 <b>${esc(s.buyer)}</b> from ${esc(s.city)} bought <b>${esc(s.productName)}</b> × ${s.qty} · <b>+${money(s.amount,0)}</b></span>
-  `).join("");
+  track.innerHTML = doubled.map(s => {
+    const isLoss = s.isLoss || (s.pl !== undefined && s.pl < 0);
+    const pl = s.pl !== undefined ? s.pl : s.amount;
+    return `<span class="tick-item">${isLoss?'📉':'🎉'} <b>${esc(s.buyer)}</b> from ${esc(s.city)} bought <b>${esc(s.productName)}</b> × ${s.qty} · <b>${isLoss?'':'+'}${moneyShort(pl)}</b></span>`;
+  }).join("");
 }
 
 /* ============ USER ACTIONS ============ */
@@ -1045,10 +1099,9 @@ function quickSell(id){
   performSale(p, 1);
   save(); renderStore();
 }
-/* 🗑️ Delete — ab revenue/sold MINUS nahi honge (persistent totals) */
 function deleteProduct(id){
   const p = state.products.find(x => x.id === id); if(!p) return;
-  if(!confirm(`Delete "${p.name}"?\n\n⚠️ Product hat jayega but aapki total earning aur revenue same rahegi.`)) return;
+  if(!confirm(`Delete "${p.name}"?\n\n⚠️ Product hat jayega but aapki total earning, revenue aur P&L same rahegi.`)) return;
   state.products = state.products.filter(x => x.id !== id);
   save(); renderStore();
   toast("🗑️ Product deleted — earnings safe hai 💰");
@@ -1056,12 +1109,13 @@ function deleteProduct(id){
 function openRestock(id){
   const p = state.products.find(x => x.id === id); if(!p) return;
   state.pendingRestockId = id;
+  const unitCost = p.cost||0;
   $("restockInfo").innerHTML = `
     <div style="display:flex;gap:12px;align-items:center;background:var(--card2);border-radius:12px;padding:12px">
       <div style="width:56px;height:56px;border-radius:10px;background:var(--ig2);display:grid;place-items:center;font-size:26px">${p.emoji}</div>
       <div style="flex:1;min-width:0">
         <div style="font-weight:700;font-size:14px;margin-bottom:3px">${esc(p.name)}</div>
-        <div style="font-size:12px;color:var(--text2)">Current stock: <b style="color:var(--text)">${p.stock}</b> · Cost: <b style="color:var(--text)">${money(p.cost||0,0)}</b></div>
+        <div style="font-size:12px;color:var(--text2)">Stock: <b style="color:var(--text)">${p.stock}</b> · Cost: <b style="color:var(--text)">${money(unitCost,0)}</b>/unit</div>
       </div>
     </div>`;
   $("restockQty").value = 10;
@@ -1109,10 +1163,29 @@ function updatePricePreview(){
   const stock = parseInt($("pStock")?.value) || 0;
   const profit = price - cost;
   const margin = price > 0 ? ((profit/price)*100) : 0;
-  const pp1 = $("ppProfit"); if(pp1){ pp1.textContent = money(profit,0); pp1.className = profit < 0 ? 'neg' : ''; }
+  const pp1 = $("ppProfit");
+  if(pp1){
+    pp1.textContent = money(profit,0);
+    pp1.className = profit < 0 ? 'neg' : '';
+  }
   const pp2 = $("ppStock"); if(pp2) pp2.textContent = money(cost*stock,0);
   const pp3 = $("ppRevenue"); if(pp3) pp3.textContent = money(price*stock,0);
-  const pp4 = $("ppMargin"); if(pp4){ pp4.textContent = margin.toFixed(0)+"%"; pp4.className = margin < 0 ? 'neg' : ''; }
+  const pp4 = $("ppMargin");
+  if(pp4){
+    pp4.textContent = margin.toFixed(0)+"%";
+    pp4.className = margin < 0 ? 'neg' : '';
+  }
+  /* Loss warning */
+  const warn = $("lossWarning");
+  const lossEl = $("lossAmt");
+  if(warn && lossEl){
+    if(profit < 0 && price > 0 && cost > 0){
+      warn.classList.add("show");
+      lossEl.textContent = money(Math.abs(profit),0) + " per unit";
+    } else {
+      warn.classList.remove("show");
+    }
+  }
 }
 function saveProduct(){
   const name = $("pName").value.trim();
@@ -1128,13 +1201,15 @@ function saveProduct(){
   if(price <= 0){ toast("⚠️ Selling price daalein"); return; }
   if(stock <= 0){ toast("⚠️ Stock quantity daalein"); return; }
 
+  const isLoss = price < cost;
+
   const product = {
     id: state.nextProductId++,
     name, cat,
     emoji: state.newEmoji,
     image: image || null,
     price, oldPrice: oldPrice || 0, cost,
-    stock, sold: 0, revenue: 0,
+    stock, sold: 0, revenue: 0, totalPL: 0,
     desc, time: Date.now()
   };
   state.products.unshift(product);
@@ -1142,8 +1217,13 @@ function saveProduct(){
   closeModal('addProductModal');
   setStoreFilter('all');
   renderStore();
-  toast(`🎉 "${name}" added! Ab ye apne aap bikna shuru hoga`, "sale");
-  pushNotif("🛍️ New Product Live", `${name} — ${money(price)} · Stock ${stock}`, "🛍️", "#22c55e");
+  if(isLoss){
+    toast(`⚠️ "${name}" added — LOSS product! Har sale par ${money(cost-price,0)} loss hoga`, "loss");
+    pushNotif("⚠️ Loss Product Added", `${name} — Cost ${money(cost,0)}, Sell ${money(price,0)} = Loss ${money(cost-price,0)}/unit`, "📉", "#ff3355");
+  } else {
+    toast(`🎉 "${name}" added! Profit ${money(price-cost,0)}/unit`, "sale");
+    pushNotif("🛍️ New Product Live", `${name} — ${money(price)} · Profit ${money(price-cost,0)}/unit`, "🛍️", "#22c55e");
+  }
 }
 
 /* ============ NAV ============ */
@@ -1188,25 +1268,39 @@ function openNotifications(){
 /* ============ ANALYTICS ============ */
 function renderAnalytics(){
   const c = $("analyticsContent"); if(!c) return;
-  const a = state.analytics;
   const totalSold = state.totalItemsSold || 0;
   const totalRevenue = state.storeRevenue || 0;
-  const topProducts = [...state.products].sort((x,y) => y.revenue - x.revenue).slice(0,5);
+  const totalProfit = state.totalProfit || 0;
+  const totalLoss = state.totalLoss || 0;
+  const netPL = totalProfit - totalLoss;
+  const topProducts = [...state.products].sort((x,y) => (y.totalPL||0) - (x.totalPL||0)).slice(0,5);
   c.innerHTML = `
     <div class="page-title">📊 Analytics</div>
     <div class="cards">
       <div class="card"><div class="lbl">🛍️ Products</div><div class="val">${state.products.length}</div></div>
       <div class="card"><div class="lbl">📦 Items Sold</div><div class="val">${fmt(totalSold)}</div></div>
-      <div class="card"><div class="lbl">💵 Store Revenue</div><div class="val" style="color:var(--green)">${moneyShort(totalRevenue)}</div></div>
+      <div class="card"><div class="lbl">💵 Revenue</div><div class="val" style="color:var(--green)">${moneyShort(totalRevenue)}</div></div>
       <div class="card"><div class="lbl">💰 Balance</div><div class="val" style="color:var(--green)">${moneyShort(getBalance())}</div></div>
     </div>
-    <div class="section"><h3>🏆 Top Selling Products</h3>
-      ${topProducts.length ? topProducts.map(p => `
+    <div class="cards">
+      <div class="card profit-card"><div class="lbl">📈 Total Profit</div><div class="val" style="color:var(--green)">+${moneyShort(totalProfit)}</div></div>
+      <div class="card loss-card"><div class="lbl">📉 Total Loss</div><div class="val loss">-${moneyShort(totalLoss)}</div></div>
+      <div class="card ${netPL>=0?'profit-card':'loss-card'}"><div class="lbl">🎯 Net P&L</div><div class="val ${netPL<0?'loss':''}" style="color:${netPL>=0?'var(--green)':'var(--red)'}">${netPL>=0?'+':''}${moneyShort(netPL)}</div></div>
+    </div>
+    <div class="section"><h3>🏆 Top Products by P&L</h3>
+      ${topProducts.length ? topProducts.map(p => {
+        const pl = p.totalPL || 0;
+        const isLoss = pl < 0;
+        return `
         <div class="top-row">
           <div class="top-thumb" style="background:var(--ig2)">${p.emoji}</div>
-          <div class="top-info"><b>${esc(p.name)}</b><span>📦 ${p.sold} sold · Stock ${p.stock}</span></div>
-          <div class="top-earn">${moneyShort(p.revenue)}</div>
-        </div>`).join("") : `<div class="empty" style="padding:20px">No products yet</div>`}
+          <div class="top-info">
+            <b>${esc(p.name)}</b>
+            <span>📦 ${p.sold} sold · Stock ${p.stock} · Cost ${money(p.cost||0,0)} · Sell ${money(p.price,0)}</span>
+          </div>
+          <div class="top-earn${isLoss?' loss':''}">${isLoss?'📉 ':'📈 +'}${moneyShort(pl)}</div>
+        </div>`;
+      }).join("") : `<div class="empty" style="padding:20px">No products yet</div>`}
     </div>`;
 }
 
@@ -1216,13 +1310,18 @@ function renderAnalytics(){
 function renderEarnings(){
   const c = $("earningsContent"); if(!c) return;
   const balance = getBalance();
-  const storeRevenue = state.storeRevenue || 0;   /* ✅ persistent */
-  const totalSold = state.totalItemsSold || 0;    /* ✅ persistent */
+  const storeRevenue = state.storeRevenue || 0;
+  const totalSold = state.totalItemsSold || 0;
+  const totalProfit = state.totalProfit || 0;
+  const totalLoss = state.totalLoss || 0;
+  const netPL = totalProfit - totalLoss;
 
   const saleTx = state.transactions.filter(t => t.type === 'sale');
+  const lossTx = state.transactions.filter(t => t.type === 'loss');
   const liveTx = state.transactions.filter(t => t.type === 'live');
   const restockTx = state.transactions.filter(t => t.type === 'restock');
   const withdrawTx = state.transactions.filter(t => t.type === 'withdraw');
+  const allSales = [...saleTx, ...lossTx].sort((a,b) => b.time - a.time);
 
   let liveBanner = "";
   if(state.live.active){
@@ -1247,15 +1346,38 @@ function renderEarnings(){
 
   c.innerHTML = `
     ${liveBanner}
-    <div class="hero">
+    <div class="hero ${balance <= 0 ? 'negative' : ''}">
       <button class="withdraw-btn" onclick="openWithdraw()">Withdraw</button>
-      <div class="lbl">💰 Balance (INR)</div>
-      <div class="amt">${money(balance)}</div>
+      <div class="lbl">💰 Wallet Balance (INR)</div>
+      <div class="amt" id="walletAmt">${money(balance)}</div>
       <div class="hero-stats">
-        <div class="hero-stat">Store Revenue <b>${moneyShort(storeRevenue)}</b></div>
-        <div class="hero-stat">Items Sold <b>${fmt(totalSold)}</b></div>
-        ${state.live.active ? `<div class="hero-stat">🔴 Live Earning <b>${moneyShort(state.live.earnings)}</b></div>` : ''}
+        <div class="hero-stat">📈 Total Profit <b style="color:#b8f5c4">+${moneyShort(totalProfit)}</b></div>
+        <div class="hero-stat ${totalLoss>0?'loss':''}">📉 Total Loss <b>-${moneyShort(totalLoss)}</b></div>
+        <div class="hero-stat ${netPL<0?'loss':''}">🎯 Net P&L <b>${netPL>=0?'+':''}${moneyShort(netPL)}</b></div>
       </div>
+    </div>
+
+    <div class="tx">
+      <h3>🛍️ Sales History (Profit/Loss per sale)</h3>
+      ${allSales.length ? allSales.slice(0,40).map(tx => {
+        const isLoss = tx.type === 'loss';
+        const pl = tx.pl !== undefined ? tx.pl : (isLoss ? -tx.amount : 0);
+        return `
+          <div class="tx-row${isLoss?' loss-row':''}">
+            <div class="tx-ic ${isLoss?'loss':'sale'}">${isLoss?'📉':'🛍️'}</div>
+            <div class="tx-info">
+              <b>${esc(tx.desc)}</b>
+              <div class="tx-meta">
+                <span class="chip-mini ${isLoss?'loss':'profit'}">${isLoss?'📉 Loss':'📈 Profit'} ${isLoss?'-':'+'}${money(Math.abs(pl),0)}</span>
+                <span style="font-size:11px;color:var(--text3)">${timeAgo(tx.time)}</span>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div class="tx-amt ${isLoss?'loss':''}">+${money(tx.amount)}</div>
+              <div class="tx-status ${tx.status}">${tx.status}</div>
+            </div>
+          </div>`;
+      }).join("") : `<div class="empty" style="padding:24px 16px"><div class="icon">🛍️</div><b>No sales yet</b><p>Store mein products add karein</p></div>`}
     </div>
 
     <div class="tx">
@@ -1284,20 +1406,7 @@ function renderEarnings(){
     </div>
 
     <div class="tx">
-      <h3>🛍️ Store Sales History</h3>
-      ${saleTx.length ? saleTx.slice(0,30).map(tx => `
-        <div class="tx-row">
-          <div class="tx-ic sale">🛍️</div>
-          <div class="tx-info">
-            <b>${esc(tx.desc)}</b>
-            <div class="tx-meta"><span style="font-size:11px;color:var(--text3)">${timeAgo(tx.time)}</span></div>
-          </div>
-          <div style="text-align:right"><div class="tx-amt">+${money(tx.amount)}</div><div class="tx-status ${tx.status}">${tx.status}</div></div>
-        </div>`).join("") : `<div class="empty" style="padding:24px 16px"><div class="icon">🛍️</div><b>No sales yet</b><p>Store mein products add karein</p></div>`}
-    </div>
-
-    <div class="tx">
-      <h3>📦 Stock Purchases</h3>
+      <h3>📦 Stock Purchases (Cost)</h3>
       ${restockTx.length ? restockTx.slice(0,15).map(tx => `
         <div class="tx-row">
           <div class="tx-ic restock">📦</div>
@@ -1323,10 +1432,11 @@ function renderEarnings(){
     </div>`;
 }
 
-function addTx({type, amount, desc, icon, status, startedAt, endedAt}){
+function addTx({type, amount, desc, icon, status, startedAt, endedAt, pl}){
   const tx = { id: state.nextTxId++, type, amount, desc, icon, status, time: Date.now() };
   if(startedAt) tx.startedAt = startedAt;
   if(endedAt) tx.endedAt = endedAt;
+  if(pl !== undefined) tx.pl = pl;
   state.transactions.unshift(tx);
   if(state.transactions.length > 300) state.transactions.pop();
   save();
@@ -1359,6 +1469,7 @@ function renderProfile(){
   const u = state.user;
   const totalSold = state.totalItemsSold || 0;
   const totalRevenue = state.storeRevenue || 0;
+  const netPL = getNetPL();
   const av = u.avatar
     ? `<img src="${esc(u.avatar)}" onerror="this.parentElement.innerHTML='${esc(u.emoji||'A')}'"/>`
     : (u.emoji || (u.name||"A").charAt(0));
@@ -1380,7 +1491,7 @@ function renderProfile(){
         <div class="prof-bio">
           <div class="n">${esc(u.name||'Aap')}</div>
           <div class="b">${esc(u.bio||'')}</div>
-          <div class="b" style="margin-top:6px;font-size:13px">🛍️ Store Revenue: <b style="color:var(--green)">${moneyShort(totalRevenue)}</b></div>
+          <div class="b" style="margin-top:6px;font-size:13px">💵 Revenue: <b style="color:var(--green)">${moneyShort(totalRevenue)}</b> · 🎯 Net P&L: <b style="color:${netPL>=0?'var(--green)':'var(--red)'}">${netPL>=0?'+':''}${moneyShort(netPL)}</b></div>
         </div>
       </div>
     </div>
@@ -1389,19 +1500,23 @@ function renderProfile(){
       <button class="btn btn-green" style="padding:9px 16px;font-size:13px" onclick="openAddProduct()">➕ Add</button>
     </div>
     <div class="product-grid" style="padding:0">
-      ${state.products.length ? state.products.slice(0,8).map(p => `
+      ${state.products.length ? state.products.slice(0,8).map(p => {
+        const isLoss = (p.price - (p.cost||0)) < 0;
+        const pl = p.totalPL || 0;
+        return `
         <div class="product-card" onclick="switchTab('store')">
           <div class="product-img">
             ${p.image ? `<img src="${esc(p.image)}"/>` : p.emoji}
             <div class="product-stock">${p.stock} left</div>
+            ${isLoss ? `<div class="product-badge loss-badge">📉</div>` : ''}
           </div>
           <div class="product-body">
             <div class="product-name">${esc(p.name)}</div>
-            <div class="product-price-row"><span class="product-price">${money(p.price,0)}</span></div>
-            <div class="product-sold"><span>📦 ${p.sold} sold</span></div>
+            <div class="product-price-row"><span class="product-price${isLoss?' loss':''}">${money(p.price,0)}</span></div>
+            <div class="product-sold"><span>📦 ${p.sold} sold</span><b class="${pl<0?'loss':''}">${moneyShort(pl)}</b></div>
           </div>
-        </div>
-      `).join("") : `<div class="empty-store" style="grid-column:1/-1">
+        </div>`;
+      }).join("") : `<div class="empty-store" style="grid-column:1/-1">
         <div class="icon">🛍️</div>
         <b>No products yet</b>
         <p>Apna pehla product add karein!</p>
@@ -1526,7 +1641,7 @@ function endLive(){
 }
 
 /* ============================================================
-   ⚡ AUTO CLICKER — fast Sell Now clicking
+   ⚡ AUTO CLICKER
    ============================================================ */
 let acTimer = null, acAccum = 0, acLastUI = 0, acLastPulse = 0;
 
@@ -1553,7 +1668,11 @@ function updateAcFloat(){
   if(!ac || !ac.on){ el.classList.remove("show"); return; }
   el.classList.add("show");
   const c = $("acFloatClicks"); if(c) c.textContent = fmt(ac.clicks) + " clicks";
-  const e = $("acFloatEarn"); if(e) e.textContent = moneyShort(ac.earned);
+  const e = $("acFloatEarn");
+  if(e){
+    e.textContent = (ac.earned >= 0 ? "+" : "") + moneyShort(ac.earned);
+    e.style.color = ac.earned < 0 ? "#0f0f0f" : "#0f0f0f";
+  }
 }
 
 function renderAutoClickerModal(){
@@ -1571,7 +1690,11 @@ function renderAutoClickerModal(){
   if(sel){
     const cur = ac.targetId ? String(ac.targetId) : "";
     sel.innerHTML = `<option value="">🎯 All Products (random sell)</option>` +
-      state.products.map(p => `<option value="${p.id}">${p.emoji} ${esc(p.name)} — ${p.stock} left</option>`).join("");
+      state.products.map(p => {
+        const unitPL = p.price - (p.cost||0);
+        const tag = unitPL < 0 ? '📉' : '📈';
+        return `<option value="${p.id}">${p.emoji} ${esc(p.name)} — ${p.stock} left ${tag} ${moneyShort(unitPL)}/u</option>`;
+      }).join("");
     sel.value = cur;
   }
   const btn = $("acToggleBtn");
@@ -1587,7 +1710,11 @@ function renderAutoClickerModal(){
 function updateAcModalStats(){
   const ac = state.autoClicker;
   const c = $("acClicks"); if(c) c.textContent = fmt(ac.clicks);
-  const e = $("acEarned"); if(e) e.textContent = moneyShort(ac.earned);
+  const e = $("acEarned");
+  if(e){
+    e.textContent = (ac.earned >= 0 ? "+" : "") + moneyShort(ac.earned);
+    e.className = "val" + (ac.earned < 0 ? " loss" : "");
+  }
   const t = $("acTime");
   if(t) t.textContent = ac.startedAt ? formatTimer(Math.floor((Date.now()-ac.startedAt)/1000)) : "00:00";
 }
@@ -1632,7 +1759,10 @@ function stopAutoClicker(showToast){
   updateAcIndicators();
   if($("autoClickerModal").classList.contains("show")) renderAutoClickerModal();
   save();
-  if(showToast) toast(`⏹ Auto Clicker band — ${fmt(ac.clicks)} clicks · ${moneyShort(ac.earned)}`, "money");
+  if(showToast){
+    const label = ac.earned >= 0 ? `Profit +${moneyShort(ac.earned)}` : `Loss ${moneyShort(ac.earned)}`;
+    toast(`⏹ Auto Clicker band — ${fmt(ac.clicks)} clicks · ${label}`, ac.earned < 0 ? "loss" : "money");
+  }
 }
 
 function resetAutoClicker(){
@@ -1645,7 +1775,7 @@ function resetAutoClicker(){
 function acTick(){
   const ac = state.autoClicker;
   if(!ac.on) return;
-  acAccum += ac.cps * 0.05;          /* 50ms tick */
+  acAccum += ac.cps * 0.05;
   let n = Math.floor(acAccum);
   acAccum -= n;
   if(n <= 0) return;
@@ -1675,9 +1805,10 @@ function acClickOnce(){
   } else {
     p = rand(sellable);
   }
+  const unitPL = p.price - (p.cost||0);
   performSale(p, 1, { silent:true });
   ac.clicks++;
-  ac.earned += p.price;
+  ac.earned += unitPL;
   pulseSellButton(p.id);
   return true;
 }
@@ -1725,7 +1856,6 @@ function init(){
   setInterval(() => {
     if($("earningsView").classList.contains("show")) renderEarnings();
   }, 5000);
-  /* ⚡ Auto clicker modal ke stats ka timer */
   setInterval(() => {
     if(state.autoClicker.on && $("autoClickerModal").classList.contains("show")) updateAcModalStats();
   }, 1000);
