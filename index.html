@@ -505,7 +505,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
     <div class="live-blob b1"></div><div class="live-blob b2"></div><div class="live-blob b3"></div>
     <div class="live-top">
       <div class="live-user"><div class="av" id="liveAv">A</div><div class="inf"><b id="liveNm">Aap</b><span id="liveTime">00:00</span></div></div>
-      <div class="live-stats"><div class="live-badge">LIVE</div><div class="live-views">👁️ <span id="liveViewers">0</span></div></div>
+      <div class="live-stats"><div class="live-badge">LIVE</div><div class="live-views">👁️ <span id="liveViewers">0</span></div><div class="live-views">👥 <span id="liveFollowers">0</span></div></div>
     </div>
     <div class="live-earn">
       <div class="lbl">🔥 LIVE EARNING <span class="x">1000x</span></div>
@@ -654,17 +654,18 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
       <label class="flbl">🎯 Target Product</label>
       <select id="acTarget" class="finp" onchange="setAcTarget(this.value)"></select>
       <label class="flbl" style="display:flex;justify-content:space-between">
-        <span>⚡ Speed</span><span id="acSpeedVal" style="color:var(--green);font-weight:800">20 clicks/sec</span>
+        <span>⚡ Speed</span><span id="acSpeedVal" style="color:var(--green);font-weight:800">100 clicks/sec</span>
       </label>
-      <input type="range" id="acSpeed" min="1" max="100" value="20" oninput="setAcSpeed(this.value)"/>
+      <input type="range" id="acSpeed" min="1" max="10000" value="100" oninput="setAcSpeed(this.value)"/>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
-        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(5);$('acSpeed').value=5">🐢 5/s</button>
-        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(20);$('acSpeed').value=20">⚡ 20/s</button>
-        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(50);$('acSpeed').value=50">🚀 50/s</button>
-        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(100);$('acSpeed').value=100">🔥 100/s</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(10);$('acSpeed').value=10">🐢 10/s</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(100);$('acSpeed').value=100">⚡ 100/s</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(1000);$('acSpeed').value=1000">🚀 1K/s</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(5000);$('acSpeed').value=5000">💥 5K/s</button>
+        <button class="btn btn-secondary" style="padding:7px 14px;font-size:12px" onclick="setAcSpeed(10000);$('acSpeed').value=10000">🔥 10K/s</button>
       </div>
       <div style="background:var(--card2);border-radius:11px;padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.6">
-        💡 Auto Clicker khud se <b style="color:var(--text)">Sell Now</b> button ko fast click karta rahega. Loss wale products par bhi kaam karega — P&L real time mein update hoga.
+        💡 Auto Clicker khud se <b style="color:var(--text)">Sell Now</b> button ko fast click karta rahega. Loss wale products par bhi kaam karega — P&L real time mein update hoga. 200+ clicks/sec par batch mode chalu ho jata hai — smooth rehta hai.
       </div>
     </div>
     <div class="mfoot">
@@ -687,7 +688,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border:2px solid #0f0
 
 <script>
 /* ============================================================
-   INSTABOOK v7 — REAL STORE (Profit/Loss) + Auto Clicker + Live
+   INSTABOOK v8 — REAL STORE + Auto Clicker 10K/s + Live Followers
    ============================================================ */
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
@@ -769,7 +770,7 @@ const state = {
   nextProductId: 1,
   nextTxId: 1,
   analytics: { totalEarnings:0, dailyViews:[0,0,0,0,0,0,0] },
-  live: { active:false, viewers:0, startedAt:null, earnings:0, gifts:0, chat:[] },
+  live: { active:false, viewers:0, startedAt:null, earnings:0, gifts:0, followersGained:0, chat:[] },
   storeFilter: "all",
   pendingRestockId: null,
   newEmoji: "👕",
@@ -780,7 +781,7 @@ const state = {
   totalProfit: 0,
   totalLoss: 0,
   /* auto clicker */
-  autoClicker: { on:false, cps:20, targetId:null, clicks:0, earned:0, startedAt:null }
+  autoClicker: { on:false, cps:100, targetId:null, clicks:0, earned:0, startedAt:null }
 };
 
 function save(){
@@ -810,6 +811,9 @@ function load(){
   if(!state.user) state.user = { name:"Aap", username:"your_instagram", bio:"Clothing brand owner 🛍️", avatar:"", emoji:"A", followers:0, following:0 };
   if(!state.nextProductId) state.nextProductId = 1;
   if(!state.recentSales) state.recentSales = [];
+  if(typeof state.user.followers !== "number") state.user.followers = 0;
+  if(!state.live) state.live = { active:false, viewers:0, startedAt:null, earnings:0, gifts:0, followersGained:0, chat:[] };
+  if(typeof state.live.followersGained !== "number") state.live.followersGained = 0;
 
   if(typeof state.storeRevenue !== "number"){
     const txRev = state.transactions.filter(t => t.type === "sale").reduce((s,t) => s + (t.amount||0), 0);
@@ -829,7 +833,7 @@ function load(){
     }
   });
 
-  if(!state.autoClicker) state.autoClicker = { on:false, cps:20, targetId:null, clicks:0, earned:0, startedAt:null };
+  if(!state.autoClicker) state.autoClicker = { on:false, cps:100, targetId:null, clicks:0, earned:0, startedAt:null };
   state.autoClicker.on = false;
 }
 
@@ -906,25 +910,27 @@ function performSale(p, qty, opts){
     ? `📉 Loss ${money(Math.abs(pl),0)}`
     : `📈 Profit ${money(pl,0)}`;
 
-  /* Transaction — loss type for red styling */
-  addTx({
-    type: isLoss ? 'loss' : 'sale',
-    amount: revenue,
-    pl: pl,
-    desc: `${buyer} (${city}) bought ${p.name} × ${sellQty} · ${plLabel}`,
-    icon: isLoss ? '📉' : '🛍️',
-    status: 'completed'
-  });
+  /* Transaction — loss type for red styling (skip in batch mode for perf) */
+  if(!opts.batch){
+    addTx({
+      type: isLoss ? 'loss' : 'sale',
+      amount: revenue,
+      pl: pl,
+      desc: `${buyer} (${city}) bought ${p.name} × ${sellQty} · ${plLabel}`,
+      icon: isLoss ? '📉' : '🛍️',
+      status: 'completed'
+    });
 
-  /* Recent sale */
-  state.recentSales.unshift({
-    buyer, city, productName: p.name, emoji: p.emoji,
-    qty: sellQty, amount: revenue, pl, isLoss,
-    time: Date.now()
-  });
-  if(state.recentSales.length > 20) state.recentSales.pop();
+    /* Recent sale */
+    state.recentSales.unshift({
+      buyer, city, productName: p.name, emoji: p.emoji,
+      qty: sellQty, amount: revenue, pl, isLoss,
+      time: Date.now()
+    });
+    if(state.recentSales.length > 20) state.recentSales.pop();
 
-  flashProductSold(p.id, sellQty, pl, isLoss);
+    flashProductSold(p.id, sellQty, pl, isLoss);
+  }
 
   if(!opts.silent){
     if(isLoss){
@@ -1335,6 +1341,7 @@ function renderEarnings(){
             <div class="stat">⏱️ <span class="lb-timer" id="earnLiveTimer">${formatTimer(durSec)}</span></div>
             <div class="stat">👁️ <b id="earnLiveViewers">${fmt(state.live.viewers)}</b> viewers</div>
             <div class="stat">🎁 <b id="earnLiveGifts">${state.live.gifts}</b> gifts</div>
+            <div class="stat">👥 <b id="earnLiveFollowers">${fmt(state.user.followers||0)}</b> followers</div>
           </div>
         </div>
         <div class="lb-earn">
@@ -1556,15 +1563,61 @@ function updateUserUI(){
 /* ============ LIVE ============ */
 function startLive(){
   if(state.live.active) return;
-  state.live = { active:true, viewers:100 + Math.floor(Math.random()*500), startedAt:Date.now(), earnings:0, gifts:0, chat:[{ name:"InstaBook", text:"🔴 Live started! 🔥 1000x earning", ts: Date.now() }] };
+  state.live = { active:true, viewers:100 + Math.floor(Math.random()*500), startedAt:Date.now(), earnings:0, gifts:0, followersGained:0, chat:[{ name:"InstaBook", text:"🔴 Live started! 🔥 1000x earning", ts: Date.now() }] };
   $("liveOverlay").classList.add("show");
   renderLiveChat(); updateLiveUI();
   toast("🔴 You are LIVE! 1000x earning 🔥");
   pushNotif("🔴 Live Started", "🔥 1000x earning active", "📡", "#ff3355");
   updateUserUI();
   startLiveTimer();
+  startLiveAutoTick();
   if($("earningsView").classList.contains("show")) renderEarnings();
 }
+
+function startLiveAutoTick(){
+  if(liveAutoTimer) clearInterval(liveAutoTimer);
+  liveAutoTimer = setInterval(() => {
+    if(!state.live.active){ clearInterval(liveAutoTimer); liveAutoTimer = null; return; }
+
+    /* Random auto gift → earning */
+    if(Math.random() < 0.45){
+      const amt = rand([5,10,20,50,100,200,500]) * LIVE_MULTIPLIER;
+      state.live.gifts++;
+      state.live.earnings += amt;
+      state.balance += amt;
+      spawnGift();
+      const fan = rand(FANS);
+      state.live.chat.push({
+        name: fan,
+        text: rand(["🔥🔥🔥","Best stream!","😍 love it","Bought 2!","Please show more!","Amazing!","Wow!","❤️","👏👏","Just followed!"]),
+        ts: Date.now()
+      });
+    }
+
+    /* Random chat even without gift */
+    if(Math.random() < 0.5){
+      state.live.chat.push({ name: rand(FANS), text: rand(["😍","🔥","Nice!","Show more!","❤️","Cool!"]), ts: Date.now() });
+    }
+
+    /* Followers growth — real followers count goes UP */
+    const gain = Math.floor(Math.random() * 8) + 1;
+    state.live.followersGained += gain;
+    state.user.followers = (state.user.followers || 0) + gain;
+
+    /* Viewers drift */
+    state.live.viewers = Math.max(50, state.live.viewers + Math.floor(Math.random()*30) - 8);
+
+    updateLiveUI();
+    renderLiveChat();
+
+    /* Banner in Earnings tab */
+    const ev = $("earnLiveViewers");   if(ev) ev.textContent = fmt(state.live.viewers);
+    const ef = $("earnLiveFollowers"); if(ef) ef.textContent = fmt(state.user.followers);
+    const eg = $("earnLiveGifts");     if(eg) eg.textContent = state.live.gifts;
+    const ea = $("earnLiveAmt");       if(ea) ea.textContent = moneyShort(state.live.earnings);
+  }, 1500);
+}
+
 let liveTimer;
 function startLiveTimer(){
   if(liveTimer) clearInterval(liveTimer);
@@ -1574,12 +1627,15 @@ function startLiveTimer(){
     const lt = $("liveTime"); if(lt) lt.textContent = formatTimer(dur);
     const et = $("earnLiveTimer"); if(et) et.textContent = formatTimer(dur);
     const ev = $("earnLiveViewers"); if(ev) ev.textContent = fmt(state.live.viewers);
+    const ef = $("earnLiveFollowers"); if(ef) ef.textContent = fmt(state.user.followers||0);
     const eg = $("earnLiveGifts"); if(eg) eg.textContent = state.live.gifts;
     const ea = $("earnLiveAmt"); if(ea) ea.textContent = moneyShort(state.live.earnings);
   }, 1000);
 }
+
 function updateLiveUI(){
-  const v = $("liveViewers"); if(v) v.textContent = fmt(state.live.viewers);
+  const v = $("liveViewers");   if(v) v.textContent = fmt(state.live.viewers);
+  const f = $("liveFollowers"); if(f) f.textContent = fmt(state.user.followers || 0);
   const e = $("liveEarnings");
   if(e){ e.textContent = moneyShort(state.live.earnings); e.classList.remove("bump"); void e.offsetWidth; e.classList.add("bump"); }
 }
@@ -1632,18 +1688,22 @@ function endLive(){
   state.analytics.totalEarnings += earnings;
   state.live.active = false;
   if(liveTimer) clearInterval(liveTimer);
+  if(liveAutoTimer){ clearInterval(liveAutoTimer); liveAutoTimer = null; }
   $("liveOverlay").classList.remove("show");
-  toast(`📴 Live ended — ${money(earnings)} earned in ${formatDuration(durSec)}! 🔥`, "money");
-  pushNotif("📴 Live Ended", `${money(earnings)} kamaye • ${formatDuration(durSec)}`, "💰", "#22c55e");
+  const fg = state.live.followersGained || 0;
+  toast(`📴 Live ended — ${money(earnings)} earned • +${fg} followers 🔥`, "money");
+  pushNotif("📴 Live Ended", `${money(earnings)} kamaye • ${formatDuration(durSec)} • +${fg} followers`, "💰", "#22c55e");
   updateUserUI();
   save();
   if($("earningsView").classList.contains("show")) renderEarnings();
 }
 
 /* ============================================================
-   ⚡ AUTO CLICKER
+   ⚡ AUTO CLICKER — up to 10,000 clicks/sec
    ============================================================ */
 let acTimer = null, acAccum = 0, acLastUI = 0, acLastPulse = 0;
+let acBatchSales = 0, acBatchPL = 0, acBatchTxTime = 0;
+let liveAutoTimer = null;
 
 function openAutoClicker(){
   renderAutoClickerModal();
@@ -1671,7 +1731,7 @@ function updateAcFloat(){
   const e = $("acFloatEarn");
   if(e){
     e.textContent = (ac.earned >= 0 ? "+" : "") + moneyShort(ac.earned);
-    e.style.color = ac.earned < 0 ? "#0f0f0f" : "#0f0f0f";
+    e.style.color = "#0f0f0f";
   }
 }
 
@@ -1703,7 +1763,8 @@ function renderAutoClickerModal(){
     btn.className = "btn " + (ac.on ? "btn-secondary" : "btn-green");
   }
   const sp = $("acSpeed"); if(sp) sp.value = ac.cps;
-  const spv = $("acSpeedVal"); if(spv) spv.textContent = ac.cps + " clicks/sec";
+  const spv = $("acSpeedVal");
+  if(spv) spv.textContent = (ac.cps >= 1000 ? (ac.cps/1000).toFixed(ac.cps%1000===0?0:1)+"K" : ac.cps) + " clicks/sec";
   updateAcModalStats();
 }
 
@@ -1720,9 +1781,10 @@ function updateAcModalStats(){
 }
 
 function setAcSpeed(v){
-  const n = Math.max(1, Math.min(100, parseInt(v,10) || 1));
+  const n = Math.max(1, Math.min(10000, parseInt(v,10) || 1));
   state.autoClicker.cps = n;
-  const spv = $("acSpeedVal"); if(spv) spv.textContent = n + " clicks/sec";
+  const spv = $("acSpeedVal");
+  if(spv) spv.textContent = (n >= 1000 ? (n/1000).toFixed(n%1000===0?0:1)+"K" : n) + " clicks/sec";
   save();
 }
 
@@ -1743,11 +1805,12 @@ function startAcEngine(){
   ac.on = true;
   ac.startedAt = Date.now();
   acAccum = 0; acLastUI = 0;
+  acBatchSales = 0; acBatchPL = 0; acBatchTxTime = Date.now();
   if(acTimer) clearInterval(acTimer);
   acTimer = setInterval(acTick, 50);
   updateAcIndicators();
   renderAutoClickerModal();
-  toast(`⚡ Auto Clicker ON · ${ac.cps} clicks/sec`, "sale");
+  toast(`⚡ Auto Clicker ON · ${ac.cps >= 1000 ? (ac.cps/1000).toFixed(0)+'K' : ac.cps} clicks/sec`, "sale");
 }
 
 function stopAutoClicker(showToast){
@@ -1756,6 +1819,21 @@ function stopAutoClicker(showToast){
   ac.on = false;
   if(acTimer){ clearInterval(acTimer); acTimer = null; }
   acAccum = 0;
+
+  /* Flush remaining batch */
+  if(acBatchSales > 0){
+    const isLoss = acBatchPL < 0;
+    addTx({
+      type: isLoss ? 'loss' : 'sale',
+      amount: 0,
+      pl: acBatchPL,
+      desc: `⚡ Auto Clicker · ${acBatchSales} sales · ${isLoss?'Loss':'Profit'} ${money(Math.abs(acBatchPL),0)}`,
+      icon: isLoss ? '📉' : '⚡',
+      status: 'completed'
+    });
+    acBatchSales = 0; acBatchPL = 0;
+  }
+
   updateAcIndicators();
   if($("autoClickerModal").classList.contains("show")) renderAutoClickerModal();
   save();
@@ -1768,6 +1846,7 @@ function stopAutoClicker(showToast){
 function resetAutoClicker(){
   const ac = state.autoClicker;
   ac.clicks = 0; ac.earned = 0; ac.startedAt = ac.on ? Date.now() : null;
+  acBatchSales = 0; acBatchPL = 0;
   save(); renderAutoClickerModal();
   toast("🔄 Auto Clicker stats reset");
 }
@@ -1775,11 +1854,12 @@ function resetAutoClicker(){
 function acTick(){
   const ac = state.autoClicker;
   if(!ac.on) return;
-  acAccum += ac.cps * 0.05;
+  acAccum += ac.cps * 0.05;      /* 50ms tick */
   let n = Math.floor(acAccum);
   acAccum -= n;
   if(n <= 0) return;
-  n = Math.min(n, 60);
+  /* Cap raised so 10,000 clicks/sec works (500 clicks per 50ms tick at 10K/s) */
+  n = Math.min(n, 2000);
   for(let i = 0; i < n; i++){
     if(!acClickOnce()) return;
   }
@@ -1806,9 +1886,12 @@ function acClickOnce(){
     p = rand(sellable);
   }
   const unitPL = p.price - (p.cost||0);
-  performSale(p, 1, { silent:true });
+  const highSpeed = ac.cps > 200;
+  performSale(p, 1, { silent:true, batch: highSpeed });
   ac.clicks++;
   ac.earned += unitPL;
+  acBatchSales++;
+  acBatchPL += unitPL;
   pulseSellButton(p.id);
   return true;
 }
@@ -1830,6 +1913,23 @@ function acUiTick(){
   const now = Date.now();
   if(now - acLastUI < 300) return;
   acLastUI = now;
+
+  /* Flush auto-clicker batch summary as ONE transaction every 3 sec */
+  if(acBatchSales > 0 && now - acBatchTxTime > 3000){
+    const isLoss = acBatchPL < 0;
+    addTx({
+      type: isLoss ? 'loss' : 'sale',
+      amount: 0,
+      pl: acBatchPL,
+      desc: `⚡ Auto Clicker · ${acBatchSales} sales · ${isLoss?'Loss':'Profit'} ${money(Math.abs(acBatchPL),0)}`,
+      icon: isLoss ? '📉' : '⚡',
+      status: 'completed'
+    });
+    acBatchSales = 0;
+    acBatchPL = 0;
+    acBatchTxTime = now;
+  }
+
   if($("storeView").classList.contains("show")) renderStore();
   else { updateStoreStats(); updateActivityPanel(); }
   if($("earningsView").classList.contains("show")) renderEarnings();
